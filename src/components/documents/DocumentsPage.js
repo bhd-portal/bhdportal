@@ -1,10 +1,39 @@
 import React, { Component } from "react";
 import { MDBRow, MDBCol, MDBCard } from "mdbreact";
-import Document from "./Document.js";
+import DocumentBullet from "./Document.js";
 import NavComponent from "../NavComponent";
 import HeaderImage from "../HeaderImage.js";
 import { DocumentsRef } from "../constants";
+import Axios from "axios";
+import { RootUrl } from "../constants";
 
+
+class Document extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      documents: []
+    };
+  }
+
+  componentDidMount() {
+    Axios.get(`${RootUrl}/document`, {
+      params: { category_id: this.props.category_id }
+    }).then(response => {
+      this.setState({ documents: response.data.documents });
+    });
+  }
+
+  render() {
+    console.log(this.state.documents);
+    return (
+      <Documents
+        documents={this.state.documents}
+      />
+    );
+  }
+
+}
 const Documents = ({ documents }) => {
   const documentsList = documents.map(document => {
     return (
@@ -13,7 +42,7 @@ const Documents = ({ documents }) => {
           className="mt-4"
           style={{ maxWidth: "15rem", minWidth: "15rem" }}
         >
-          <Document {...document} />
+          <DocumentBullet {...document} />
         </MDBCol>{" "}
       </React.Fragment>
     );
@@ -47,7 +76,7 @@ class DocumentsPage extends Component {
 
         <NavComponent
           page_ref={DocumentsRef}
-          render={category_id => <Documents category_id={category_id} />}
+          render={category_id => <Document category_id={category_id} />}
         />
       </React.Fragment>
     );
