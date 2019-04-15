@@ -31,7 +31,7 @@ class Admin_ABGuidance_EditableTable extends Component {
       file: undefined
     };
 
-    this.getDocuments();
+    this.GetABDocuments();
   }
 
   handleFiles = files => {
@@ -45,7 +45,7 @@ class Admin_ABGuidance_EditableTable extends Component {
     const data = new FormData();
     data.append("file", this.state.file);
     data.append("filename", this.state.file.name);
-    data.append("category", "Docuemnts");
+    data.append("category", "abdocuments");
     Axios.post(`${RootUrl}/file`, data)
       .then(res => {
         this.setState({ href: res.data.path });
@@ -55,7 +55,7 @@ class Admin_ABGuidance_EditableTable extends Component {
       });
   };
 
-  getDocuments = () => {
+  GetABDocuments = () => {
     Axios.get(`${RootUrl}/abguidancedocument`, {
       params: { subcategory_id: this.props.subcategory_id }
     })
@@ -108,7 +108,7 @@ class Admin_ABGuidance_EditableTable extends Component {
         const data = new FormData();
         data.append("file", this.state.file);
         data.append("filename", this.state.file.name);
-        data.append("category", "documents");
+        data.append("category", "abdocuments");
         Axios.post(`${RootUrl}/file`, data).then(res => {
           const href = res.data.path;
           Axios.patch(`${RootUrl}/abguidancedocument`, {
@@ -151,7 +151,7 @@ class Admin_ABGuidance_EditableTable extends Component {
       const data = new FormData();
       data.append("file", this.state.file);
       data.append("filename", this.state.file.name);
-      data.append("category", "documents");
+      data.append("category", "abdocuments");
       Axios.post(`${RootUrl}/file`, data)
         .then(res => {
           const href = res.data.path;

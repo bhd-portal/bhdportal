@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import Toaster from "../Toaster";
 import Axios from "axios";
 import { RootUrl } from "../constants";
+import Dragzone from "./Dragzone";
+
 
 class Admin_Doc_EditableTable extends Component {
   constructor(props) {
@@ -20,12 +22,36 @@ class Admin_Doc_EditableTable extends Component {
       deleteModal: false,
       editModal: false,
       focused_index: undefined,
-      editValues: { name: "", iconName: "", href: "" },
+      name: "",
+      icon: "",
+      href:"",
+      // editValues: { name: "", iconName: "", href: "" },
       documents: []
     };
 
     this.getDocuments();
   }
+
+  handleFiles = files => {
+    this.setState({ file: files[0] });
+  };
+
+  uploadFiles = () => {
+    if (!this.state.file) {
+      return alert("No file");
+    }
+    const data = new FormData();
+    data.append("file", this.state.file);
+    data.append("filename", this.state.file.name);
+    data.append("category", "documents");
+    Axios.post(`${RootUrl}/file`, data)
+      .then(res => {
+        this.setState({ href: res.data.path });
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+  };
 
   getDocuments = () => {
     Axios.get(`${RootUrl}/document`, {
@@ -51,30 +77,115 @@ class Admin_Doc_EditableTable extends Component {
   };
 
   handleDelete = e => {
-    const { category_index, subcategory_index } = this.props;
-    console.log(
-      `In ${category_index}: In ${subcategory_index}: Delete ${
-        this.state.focused_index
-      }`
-    );
+    // delete
+    const id = this.state.documents[this.state.focused_index]._id;
+    Axios.delete(`${RootUrl}/document`, {
+      params: {
+        id
+      }
+    })
+      .then(res => {
+        this.setState({
+          documents: this.state.documents.filter(elem => elem._id !== id),
+          isLoading: false
+        });
+        toast.info("מסמך נמחק בהצלחה!");
+      })
+      .catch(err => {
+        this.setState({ error: err, isLoading: false });
+        toast.error("מחיקת מסמך נכשלה!");
+      });
+
     this.handleToggle("deleteModal")(e);
-    toast.info("תוצר נמחק בהצלחה!");
   };
 
   handleEdit = e => {
-    const { category_index, subcategory_index } = this.props;
-    console.log(
-      `In ${category_index}: In ${subcategory_index}: Edit ${
-        this.state.focused_index
-      } to ${this.state.editValues}`
-    );
+    const { category_id } = this.props;
+    const { focused_index, documents, name, file, icon } = this.state;
+    if (focused_index !== undefined) {
+      if (file) {
+        const data = new FormData();
+        data.append("file", this.state.file);
+        data.append("filename", this.state.file.name);
+        data.append("category", "documents");
+        Axios.post(`${RootUrl}/file`, data).then(res => {
+          const href = res.data.path;
+          Axios.patch(`${RootUrl}/document`, {
+            category_id,
+            id: documents[focused_index]._id,
+            name,
+            icon,
+            href
+          })
+            .then(res => {
+              documents[focused_index] = res.data.document;
+
+              this.setState({ documents, isLoading: false });
+              toast.info("מסמך עודכן בהצלחה!");
+            })
+            .catch(err => {
+              this.setState({ error: err, isLoading: false });
+              toast.error("עדכון מסמך נכשל!");
+            });
+        });
+      } else {
+        let { href } = this.state;
+        Axios.patch(`${RootUrl}/document`, {
+          category_id,
+          id: documents[focused_index]._id,
+          name,
+          icon,
+          href
+        })
+          .then(res => {
+            documents[focused_index] = res.data.document;
+
+            this.setState({ documents, isLoading: false });
+            toast.info("מסמך עודכן בהצלחה!");
+          })
+          .catch(err => {
+            this.setState({ error: err, isLoading: false });
+            toast.error("עדכון מסמך נכשל!");
+          });
+      }
+    } else {
+      const data = new FormData();
+      data.append("file", this.state.file);
+      data.append("filename", this.state.file.name);
+      data.append("category", "documents");
+      Axios.post(`${RootUrl}/file`, data)
+        .then(res => {
+          const href = res.data.path;
+          Axios.post(`${RootUrl}/document`, {
+            category_id,
+            icon,
+            name,
+            href
+          })
+            .then(res => {
+              documents.push(res.data.document);
+
+              this.setState({ documents, isLoading: false });
+              toast.info("מסמך נוסף בהצלחה!");
+            })
+            .catch(err => {
+              this.setState({ error: err, isLoading: false });
+              toast.error(" הוספת מסמך נכשלה!");
+            });
+        })
+        .catch(error => {
+          this.handleToggle("editModal")(e);
+          this.setState({ error });
+          toast.error(" הוספת מסמך נכשלה!");
+          return;
+        });
+    }
     this.handleToggle("editModal")(e);
-    toast.info("תוצר עודכן בהצלחה!");
   };
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ editValues: { [name]: value } });
+    this.setState({  [name]: value  });
   };
 
   render() {
@@ -182,10 +293,10 @@ class Admin_Doc_EditableTable extends Component {
                 validate
                 error="wrong"
                 success="right"
-                value={this.state.editValues.name}
+                value={this.state.name}
               />
               <MDBInput
-                name="iconName"
+                name="icon"
                 onChange={this.handleChange}
                 label="הזן שם צלמית"
                 group
@@ -193,18 +304,12 @@ class Admin_Doc_EditableTable extends Component {
                 validate
                 error="wrong"
                 success="right"
-                value={this.state.editValues.iconName}
+                value={this.state.icon}
               />
-              <MDBInput
-                name="href"
-                onChange={this.handleChange}
-                label="הזן קישור למסמך"
-                group
-                type="text"
-                validate
-                error="wrong"
-                success="right"
-                value={this.state.editValues.href}
+              <Dragzone
+                handleFiles={this.handleFiles}
+                file={this.state.file}
+                href={this.state.href}
               />
               <div className="mb-3 pr-5 pl-5">
                 <MDBBtn type="button" onClick={this.handleToggle("editModal")}>
