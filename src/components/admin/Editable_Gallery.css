@@ -1,0 +1,22 @@
+.gallery-edit-buttons {
+  position: absolute;
+  left: 2%;
+  top: 0%;
+  z-index: 1;
+  visibility: hidden;
+  transition: visibility linear 0.2s;
+  transition: transform linear 0.2s;
+}
+
+.image-view:hover .gallery-edit-buttons {
+  visibility: visible;
+}
+
+.remove-button:hover {
+  transform: scale(1.2);
+  color: red;
+}
+
+.editable > a > h5 > i.fa {
+  visibility: hidden;
+}

@@ -1,0 +1,12 @@
+.edit-cards {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.edit-card {
+  width: 30%;
+}
+
+.save-button {
+  bottom: 0%;
+}

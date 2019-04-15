@@ -1,0 +1,28 @@
+.nav-buttons {
+  position: absolute;
+  left: 5%;
+  top: 0%;
+  z-index: 1;
+  visibility: hidden;
+  transition: visibility linear 0.2s;
+  transition: transform linear 0.2s;
+}
+
+.nav-item:hover .active .nav-buttons {
+  visibility: visible;
+}
+
+.edit-button:hover {
+  transform: scale(1.2);
+  color: #1976d2;
+}
+
+.remove-button:hover {
+  transform: scale(1.2);
+  color: red;
+}
+
+div[role="alert"] {
+  direction: rtl;
+  text-align: right;
+}

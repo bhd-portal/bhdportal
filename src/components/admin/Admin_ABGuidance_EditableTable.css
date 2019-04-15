@@ -1,0 +1,27 @@
+.edit-content {
+  position: relative;
+}
+
+.edit-buttons {
+  position: absolute;
+  left: 2%;
+  top: 0%;
+  z-index: 5;
+  visibility: hidden;
+  transition: visibility linear 0.2s;
+  transition: transform linear 0.2s;
+}
+
+.edit-content:hover .edit-buttons {
+  visibility: visible;
+}
+
+.edit-button:hover {
+  transform: scale(1.2);
+  color: #1976d2;
+}
+
+.handle-buttons {
+  display: flex;
+  justify-content: flex-end;
+}

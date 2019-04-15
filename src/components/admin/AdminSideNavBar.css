@@ -1,0 +1,15 @@
+.side-bar {
+  position: fixed;
+  top: 80px;
+  right: 8px;
+  z-index: 3;
+}
+
+.side-bar > a {
+  display: block;
+  block-size: 60px;
+}
+
+.tooltip-inner {
+  width: 100px;
+}

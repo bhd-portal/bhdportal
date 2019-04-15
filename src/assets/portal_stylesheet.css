@@ -1,0 +1,254 @@
+@font-face {
+  font-family: "Assistant";
+  src: url("../assets/assistant/Assistant-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Alef";
+  src: url("../assets/Alef/Alef-Regular.ttf");
+  font-weight: 400;
+}
+
+body {
+  font-family: "Assistant", sans-serif;
+  background-color: #f9f9f9 !important;
+  direction: "rtl" !important;
+}
+.nav-bg {
+  background-color: #f9f9f9 !important;
+}
+/* 
+.navbar.navbar-dark .navbar-nav .nav-item .nav-link {
+  color: #2e3038;
+}
+
+.nav-link.active {
+  color: #67c7c1 !important;
+} */
+
+.container-fluid {
+  direction: rtl !important;
+}
+
+/* .classic-tabs .nav {
+  @media (min-width: 62em) {
+    .classic-tabs .nav li:first-child {
+      margin-left: 0px !important;
+    }
+  }
+} */
+
+.classic-tabs .nav li a {
+  padding: 12px 20px !important;
+}
+
+.footer-copyright {
+  direction: ltr !important;
+}
+
+.modal-content {
+  direction: rtl !important;
+}
+/* 
+margin-right: -30px; */
+.paper-clip {
+  color: #1976d2 !important;
+  margin-left: 5px !important;
+  margin-right: 10px !important;
+  margin-top: 5px !important;
+}
+
+.download-button {
+  padding: 0px 25px 0px 25px !important;
+}
+
+.container-fluid {
+  width: 80%;
+}
+
+.products-row2 {
+  padding-right: 2.3% !important;
+  padding-left: 2.3% !important;
+  padding-top: 35px !important;
+}
+.products-col {
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+}
+
+.products-row {
+  padding-right: 1% !important;
+  padding-left: 1% !important;
+}
+
+.products-tab-pane {
+  margin-top: 60px !important;
+}
+
+.docum-row {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.docum-nav {
+  margin-bottom: 0px !important;
+  padding-top: 20px !important;
+  padding-bottom: 50px !important;
+}
+
+.docum-icon {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+  color: white !important;
+}
+
+.card-up2 {
+  margin: 0px !important;
+  padding: 0px !important;
+  height: 84px !important;
+}
+
+.card-down {
+  margin-top: 25px !important;
+}
+
+.docum-avatar {
+  border: 0px !important;
+  padding-right: 0px !important;
+  border-radius: 50% !important;
+  width: 40% !important;
+}
+
+.ab-list {
+  background-color: #f6f6f6 !important;
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
+  border: 0 !important;
+  border-radius: 5px !important;
+  margin-bottom: 30px !important;
+  padding-right: 0px;
+}
+
+.documents-row {
+  padding-left: 2.5% !important;
+}
+
+.documents-a-color {
+  color: #6d6e71 !important;
+}
+
+.ab_guidance_tabs {
+  padding-right: 0px !important;
+}
+
+.paper-clip-col {
+  padding-right: 15px !important;
+}
+
+.paperclip-wording {
+  font-size: 130% !important;
+}
+
+.upper-navigation {
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+}
+
+.inner-nav-tab-pane {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
+.ab-guidance-row {
+  padding-right: 3% !important;
+  padding-left: 4% !important;
+}
+
+.ab-guidance-card {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
+.gallery-photos-grid {
+  padding-right: 2% !important;
+  padding-left: 2% !important;
+}
+
+.products-pane {
+  margin-bottom: 30px !important;
+}
+
+.admin-button {
+  font-size: 140% !important;
+}
+
+.admin-name-pass {
+  margin-left: 86% !important;
+}
+
+.h1-title {
+  margin-top: 6% !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.table-head {
+  font-size: 120% !important;
+}
+
+.table-text {
+  font-size: 100% !important;
+  font-weight: 100 !important;
+}
+
+.table-edit-delete {
+  font-size: 120% !important;
+}
+
+.plus-button-green {
+  text-align: left !important;
+  font-size: "160%" !important;
+}
+
+.select-dropdown {
+  padding-right: 15px !important;
+}
+
+.right-text {
+  text-align: right !important;
+}
+
+.col-branch-photo {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  max-width: 10%;
+}
+
+.front-page-title {
+  font-size: 6rem !important;
+  font-family: "Alef", sans-serif !important;
+  text-align: right !important;
+}
+
+.video-intro {
+  right: 0% !important;
+}
+video {
+  object-fit: fill !important;
+}
+
+.collapse-news {
+  color: #175db7 !important;
+}
+
+.home-page-products-col {
+  padding-right: 2% !important;
+  padding-left: 2% !important;
+}
+
+.button-watch-more {
+  width: "10%" !important;
+}
