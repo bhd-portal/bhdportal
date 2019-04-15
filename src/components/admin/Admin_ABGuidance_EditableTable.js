@@ -56,7 +56,7 @@ class Admin_ABGuidance_EditableTable extends Component {
   };
 
   getDocuments = () => {
-    Axios.get(`${RootUrl}/document`, {
+    Axios.get(`${RootUrl}/abguidancedocument`, {
       params: { subcategory_id: this.props.subcategory_id }
     })
       .then(res =>
@@ -81,7 +81,7 @@ class Admin_ABGuidance_EditableTable extends Component {
   handleDelete = e => {
     const { focused_index, documents } = this.state;
     const id = this.state.documents[focused_index]._id;
-    Axios.delete(`${RootUrl}/document`, {
+    Axios.delete(`${RootUrl}/abguidancedocument`, {
       params: {
         id
       }
@@ -111,7 +111,7 @@ class Admin_ABGuidance_EditableTable extends Component {
         data.append("category", "documents");
         Axios.post(`${RootUrl}/file`, data).then(res => {
           const href = res.data.path;
-          Axios.patch(`${RootUrl}/document`, {
+          Axios.patch(`${RootUrl}/abguidancedocument`, {
             subcategory_id,
             id: documents[focused_index]._id,
             name,
@@ -130,7 +130,7 @@ class Admin_ABGuidance_EditableTable extends Component {
         });
       } else {
         let { href } = this.state;
-        Axios.patch(`${RootUrl}/document`, {
+        Axios.patch(`${RootUrl}/abguidancedocument`, {
           subcategory_id,
           id: documents[focused_index]._id,
           name,
@@ -155,7 +155,7 @@ class Admin_ABGuidance_EditableTable extends Component {
       Axios.post(`${RootUrl}/file`, data)
         .then(res => {
           const href = res.data.path;
-          Axios.post(`${RootUrl}/document`, {
+          Axios.post(`${RootUrl}/abguidancedocument`, {
             subcategory_id,
             name,
             href
@@ -185,7 +185,6 @@ class Admin_ABGuidance_EditableTable extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-
 
   render() {
     const documents = this.state.documents.map(({ name }, index) => {
@@ -218,7 +217,6 @@ class Admin_ABGuidance_EditableTable extends Component {
     });
     return (
       <React.Fragment>
-        
         <table className="table table-hover table-striped">
           <thead className="table-head">
             <tr>

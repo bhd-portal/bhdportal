@@ -46,14 +46,15 @@ class ABGuidanceDocumentCard extends React.Component {
   }
 
   componentDidMount() {
-    Axios.get(`${RootUrl}/document`, {
+    Axios.get(`${RootUrl}/abguidancedocument`, {
       params: { subcategory_id: this.props.subcategory_id }
     }).then(response => {
-      this.setState(response.data.documents);
+      this.setState({ documents: response.data.documents });
     });
   }
 
   render() {
+    console.log(this.state.documents);
     return (
       <React.Fragment>
         {" "}

@@ -10,6 +10,9 @@ import {
 } from "mdbreact";
 import { Link } from "react-router-dom";
 import Toaster from "../Toaster";
+import Axios from "axios";
+import { RootUrl } from "../constants";
+
 class Admin_Doc_EditableTable extends Component {
   constructor(props) {
     super(props);
@@ -18,9 +21,23 @@ class Admin_Doc_EditableTable extends Component {
       editModal: false,
       focused_index: undefined,
       editValues: { name: "", iconName: "", href: "" },
-      documents: this.props.documents
+      documents: []
     };
+
+    this.getDocuments();
   }
+
+  getDocuments = () => {
+    Axios.get(`${RootUrl}/document`, {
+      params: { category_id: this.props.category_id }
+    })
+      .then(res =>
+        this.setState({ documents: res.data.documents, isLoading: false })
+      )
+      .catch(({ error }) => {
+        this.setState({ error, isLoading: false });
+      });
+  };
 
   handleToggle = (modal, focused_index = undefined) => e => {
     this.setState({ [modal]: !this.state[modal], focused_index });

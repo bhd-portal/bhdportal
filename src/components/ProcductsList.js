@@ -41,7 +41,7 @@ class ProcductsList extends Component {
     Axios.get(`${RootUrl}/product`, {
       params: { subcategory_id: this.props.subcategory_id }
     }).then(response => {
-      this.setState(response.data.products);
+      this.setState({ products: response.data.products });
     });
   }
 
