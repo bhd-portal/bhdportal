@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 import { MDBCol } from "mdbreact";
 import { RootUrl } from "./constants";
 import Axios from "axios";
@@ -29,21 +29,27 @@ const Product = ({ title, content, imageURL, link, className }) => {
   );
 };
 
-const ProcductsList = ({ subcategory_id, type }) => {
-  let [products, setState] = useState([]);
+class ProcductsList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: []
+    };
+  }
 
-  useEffect(
-    () =>
-      Axios.get(`${RootUrl}/product`, { params: { subcategory_id } }).then(
-        response => {
-          setState(response.data.products);
-        }
-      ),
-    []
-  );
+  componentDidMount() {
+    Axios.get(`${RootUrl}/product`, {
+      params: { subcategory_id: this.props.subcategory_id }
+    }).then(response => {
+      this.setState(response.data.products);
+    });
+  }
 
-  return products.map(product => {
-    return <Product {...product} className={type} />;
-  });
-};
+  render() {
+    return this.state.products.map(product => {
+      return <Product {...product} className={this.props.type} />;
+    });
+  }
+}
+
 export default ProcductsList;

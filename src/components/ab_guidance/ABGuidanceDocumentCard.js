@@ -37,29 +37,33 @@ const ABGuidanceDocumentList = ({ documents }) => {
   }
 };
 
-const ABGuidanceDocumentCard = ({ subcategory_id, description = "" }) => {
-  let [documents, setState] = useState([]);
+class ABGuidanceDocumentCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      documents: []
+    };
+  }
 
-  useEffect(
-    () =>
-      Axios.get(`${RootUrl}/document`, { params: { subcategory_id } }).then(
-        response => {
-          setState(response.data.documents);
-        }
-      ),
-    []
-  );
+  componentDidMount() {
+    Axios.get(`${RootUrl}/document`, {
+      params: { subcategory_id: this.props.subcategory_id }
+    }).then(response => {
+      this.setState(response.data.documents);
+    });
+  }
 
-  return (
-    <React.Fragment>
-      {" "}
-      <h5 className="text-right mr-4 ml-4">{description} </h5>
-      <br />
-      <hr />
-      {console.log(documents)}
-      <ABGuidanceDocumentList documents={documents} />{" "}
-    </React.Fragment>
-  );
-};
+  render() {
+    return (
+      <React.Fragment>
+        {" "}
+        <h5 className="text-right mr-4 ml-4">{this.props.description} </h5>
+        <br />
+        <hr />
+        <ABGuidanceDocumentList documents={this.state.documents} />{" "}
+      </React.Fragment>
+    );
+  }
+}
 
 export default ABGuidanceDocumentCard;
