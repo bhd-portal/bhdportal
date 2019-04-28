@@ -29,6 +29,7 @@ class HomePage extends Component {
       collapseID: "",
       photoIndex: 0,
       isOpen: false,
+      ideals: [],
       images: [
         "https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(145).jpg",
         "https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(150).jpg",
@@ -155,6 +156,7 @@ class HomePage extends Component {
     };
 
     this.getUpdates();
+    this.getIdeals();
   }
 
   getUpdates = () => {
@@ -194,6 +196,32 @@ class HomePage extends Component {
       );
     });
   };
+
+  getIdeals = () => {
+    Axios.get(`http://localhost:5003/api/ideals`)
+      .then(response => {
+        this.setState({ ideals: response.data});
+      })
+      .catch(() => {
+        this.setState({ error: "Error fetching posts", isLoading: false });
+      });
+  };
+
+  renderIdeals() {
+    var idealsElements = this.state.ideals.map((ideal) =>
+      <MDBCol style={{ backgroundColor: "#ede7f6" }}>
+        <MDBRow center>
+          <h3 className="font-weight-bold mb-3 mt-2 p-0">
+            <strong>{ideal.name}</strong>
+          </h3>
+        </MDBRow>
+        <MDBRow center>
+          <h5 style={{ padding: "5%" }}>{ideal.text}</h5>
+        </MDBRow>
+      </MDBCol>
+    );
+    return(idealsElements)
+  }
 
   render() {
     const {
@@ -300,46 +328,14 @@ class HomePage extends Component {
           }}
         >
           <MDBRow className="text-center ">
-            <MDBCol style={{ backgroundColor: "#ede7f6" }}>
-              <MDBRow center>
-                <h3 className="font-weight-bold mb-3 mt-2 p-0">
-                  <strong>חזון המערך</strong>
-                </h3>
-              </MDBRow>
-              <MDBRow center>
-                <h5 style={{ padding: "5%" }}>{this.state.vision}</h5>
-              </MDBRow>
-            </MDBCol>
-            <MDBCol style={{ backgroundColor: "#F5F6F7" }}>
-              <MDBRow center>
-                <h3 className="font-weight-bold mb-3 mt-2 p-0">
-                  <strong>יעוד המערך</strong>
-                </h3>
-              </MDBRow>
-              <MDBRow center>
-                <h5 style={{ padding: "5%" }}>{this.state.purpose}</h5>
-              </MDBRow>
-            </MDBCol>
-
-            <div style={{ borderLeft: "1px solid #e8eaf6", height: "23rem" }} />
-
-            <MDBCol style={{ backgroundColor: "#e3f2fd" }}>
-              <MDBRow center>
-                <h3 className="font-weight-bold mb-3 mt-2 p-0">
-                  <strong>דבר המפקד</strong>
-                </h3>
-              </MDBRow>
-              <MDBRow center>
-                <h5 style={{ padding: "5%" }}>{this.state.commander}</h5>
-              </MDBRow>
-            </MDBCol>
+            {this.renderIdeals()}
           </MDBRow>
         </MDBCard>
-        <MDBCard
+        {/* <MDBCard
           className="px-5 pb-3"
           style={{ marginRight: "2%", marginLeft: "2%", marginBottom: "2%" }}
-        >
-          <MDBCardBody>
+        > */}
+          {/* <MDBCardBody>
             <MDBRow className="text-right">
               <MDBCol lg="3">
                 <MDBView className="rounded z-depth-2 mb-lg-0 mb-4" hover waves>
@@ -410,9 +406,9 @@ class HomePage extends Component {
                 />
               </MDBCol>
             </MDBRow>
-          </MDBCardBody>
-        </MDBCard>
-        <h2
+          </MDBCardBody> */}
+        {/* </MDBCard> */}
+        {/* <h2
           className="text-right"
           style={{ marginRight: "2%", marginTop: "2%" }}
         >
@@ -451,7 +447,7 @@ class HomePage extends Component {
               }
             />
           )}
-        </MDBCard>
+        </MDBCard> */}
       </React.Fragment>
     );
   }

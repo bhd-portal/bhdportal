@@ -1,49 +1,34 @@
 import React, { Component } from "react";
-import { MDBContainer, MDBBtn } from "mdbreact";
-import Dragzone from "./Dragzone";
-import Axios from "axios";
-import { RootUrl } from "../constants";
+import EditableNav from "./EditableNav";
+import Admin_Branch_EditableTable from "./Admin_Branch_EditableTable";
+import { BranchRef } from "../constants";
+// _id: "1",
+// name: "Anna Doe",
+// iconName: "chess-pawn",
+// href: "/ab_guidance/chapter_1/מסמכים בבינה מלאכותית2.docx"
 
-class Admin_Gallery extends Component {
+class Admin_Branch extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      files: undefined
-    };
+    this.state = {};
   }
-
-  handleFiles = files => {
-    this.setState({ files });
-  };
-
-  uploadFiles = () => {
-    if (!this.state.files) {
-      return alert("No files");
-    }
-    console.log(this.state.files);
-    const data = new FormData();
-    data.append("file", this.state.files[0]);
-    data.append("filename", this.state.files[0].name);
-    data.append("category", "images");
-    Axios.post(`${RootUrl}/file`, data)
-      .then(res => {
-        console.log(res.data.path);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
 
   render() {
     return (
       <React.Fragment>
-        <h1 className="h1-title mb-4 text-center">ניהול ענפים</h1>
-        <MDBContainer fluid className="text-center ">
-          <Dragzone handleFiles={this.handleFiles} files={this.state.files} />
-          <MDBBtn onClick={this.uploadFiles}> Upload </MDBBtn>
-        </MDBContainer>
+        <h1 className="h1-title mb-4 text-center">ניהול מסמכים נפוצים</h1>
+        <EditableNav
+          page_ref={BranchRef}
+          render={category_id => (
+            <Admin_Branch_EditableTable category_id={category_id} />
+          )}
+        />
       </React.Fragment>
     );
   }
 }
-export default Admin_Gallery;
+export default Admin_Branch;

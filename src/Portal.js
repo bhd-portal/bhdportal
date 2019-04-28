@@ -18,14 +18,75 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import Routes from "./Routes";
 import "./assets/portal_stylesheet.css";
 
+import Axios from "axios";
+import { RootUrl } from "./components/constants";
+
 class Portal extends Component {
   state = {
     collapseID: "",
     modal1: false,
     modal2: false,
     modal3: false,
-    activeItem: "1"
+    activeItem: "1",
+
+    name: "",
+    password: ""
   };
+
+  renderManagement() {
+    if(localStorage.getItem("token")) {
+      return (
+        <MDBNavItem>
+          <MDBNavLink
+            onClick={this.closeCollapse("mainNavbarCollapse")}
+            to="/admin"
+          >
+            ניהול
+            <i class="fas fa-user-cog ml-2" />
+          </MDBNavLink>
+        </MDBNavItem>
+      )
+    }
+    else {
+      return;
+    }
+  }
+
+  componentWillMount() {
+    if(localStorage.getItem("token")) {
+      // user is logged
+      console.log("user is logged!!!")
+    }
+  }
+
+  handleUsernameChange(e) {
+    this.setState({
+      name: e.target.value
+    });
+  }
+
+  handlePasswordChange(e) {
+    this.setState({
+      password: e.target.value
+    });
+  }
+
+  componentDidMount() {
+    this.inputInformation = {};
+  }
+
+  loginAccount() {
+    console.log(this.inputInformation);
+    Axios.post(`${RootUrl}/admins/login`, {
+      name: this.state.name,
+      password: this.state.password
+    }).then(resp => {
+      if(!resp.data.success) { return; }
+      //write token into cookies
+      localStorage.setItem("token", resp.data.token);
+      this.setState({modal2: false});
+    })
+  }
 
   toggleCollapse = collapseID => () =>
     this.setState(prevState => ({
@@ -87,15 +148,7 @@ class Portal extends Component {
               navbar
             >
               <MDBNavbarNav right style={{ fontSize: "18px" }}>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/admin"
-                  >
-                    ניהול
-                    <i class="fas fa-user-cog ml-2" />
-                  </MDBNavLink>
-                </MDBNavItem>
+                {this.renderManagement()}
                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
@@ -180,7 +233,7 @@ class Portal extends Component {
 
             <MDBModal
               className="form-elegant "
-              isOpen={this.state.modal2}
+              isOpen={this.state.modal2 && !localStorage.getItem("token")}
               toggle={this.toggle(2)}
             >
               <MDBModalBody className="mx-3 ">
@@ -200,6 +253,8 @@ class Portal extends Component {
                     error="wrong"
                     success="right"
                     className="admin-name-pass"
+                    value={this.state.name} 
+                    onChange={ (e) => this.handleUsernameChange(e) }
                   />
                   <MDBInput
                     label="סיסמא"
@@ -208,11 +263,14 @@ class Portal extends Component {
                     validate
                     containerClass="mb-0"
                     className="admin-name-pass"
+                    value={this.state.password} 
+                    onChange={ (e) => this.handlePasswordChange(e) }
                   />
                   <div className="text-center mb-3 pr-5 pl-5">
                     <MDBBtn
                       type="button"
                       gradient="blue"
+                      onClick={() => {this.loginAccount()}}
                       rounded
                       className="btn-block z-depth-1a admin-button"
                     >

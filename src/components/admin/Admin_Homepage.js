@@ -25,6 +25,7 @@ class Admin_Gallery extends Component {
       editModal: false,
       focused_index: undefined,
       editValues: { name: "", text: "" },
+      ideals: [],
       vision:
         "מערך ההדרכה למודיעין ולסייבר שותף למשימה המודיעינית ואיכותה, במקצוענות הדרכתית מתחדשת ופורצת דרך",
 
@@ -38,10 +39,34 @@ class Admin_Gallery extends Component {
     };
 
     this.getUpdates();
+    this.getIdeals();
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
+  }
+
+  getIdeals = () => {
+    Axios.get(`http://localhost:5003/api/ideals`)
+      .then(response => {
+        this.setState({ ideals: response.data});
+      })
+      .catch(() => {
+        this.setState({ error: "Error fetching posts", isLoading: false });
+      });
+  };
+
+  updateIdeal(ideal, text) {
+    Axios.post(`http://localhost:5003/api/ideals/` + ideal._id, {text})
+      .then(response => {
+        // this.setState({ ideals: response.data});
+        toast.info("ערך עודכן בהצלחה!");
+      })
+      .catch(() => {
+        // this.setState({ error: "Error fetching posts", isLoading: false });
+        toast.error("ערך לא עודכן");
+      });
+
   }
 
   getUpdates = () => {
@@ -71,8 +96,10 @@ class Admin_Gallery extends Component {
         this.state.commander
       }`
     );
+
     toast.info("ערך עודכן בהצלחה!");
   };
+
   handleHeaderChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -134,6 +161,43 @@ class Admin_Gallery extends Component {
     this.setState({ editValues });
   };
 
+  onChangeIdeal(e, index) {
+    var ideals = this.state.ideals;
+    ideals[index].text = e.target.value;
+    this.setState({ideals})
+  }
+
+  renderIdeals() {
+    if(!this.state.ideals.map) { return }
+    var idealsElements = this.state.ideals.map((ideal, index) =>
+      <MDBCard testimonial className="edit-card">
+        <MDBCardHeader>
+          <h4 className="card-name card-down">{ideal.name + "ערוך"}</h4>
+        </MDBCardHeader>
+        <MDBCardBody>
+          <MDBInput
+            name="vision"
+            type="textarea"
+            label={ideal.name}
+            value={ideal.text}
+            onChange={(e) => {this.onChangeIdeal(e, index)}}
+          />
+
+          <MDBBtn
+            size="mg"
+            type="button"
+            color="green"
+            className="save-button"
+            onClick={() => {this.updateIdeal(ideal, this.state.ideals[index].text)}}
+          >
+            <MDBIcon icon="save" size="lg" />
+          </MDBBtn>
+        </MDBCardBody>
+      </MDBCard>
+    );
+    return(idealsElements)
+  }
+
   render() {
     const { isLoading, error } = this.state;
     if (isLoading) {
@@ -174,76 +238,7 @@ class Admin_Gallery extends Component {
       <React.Fragment>
         <h1 className="h1-name mb-4 text-center">ניהול דף הבית</h1>
         <MDBContainer fluid className="text-center edit-cards">
-          <MDBCard testimonial className="edit-card">
-            <MDBCardHeader>
-              <h4 className="card-name card-down">ערוך חזון המערך</h4>
-            </MDBCardHeader>
-            <MDBCardBody>
-              <MDBInput
-                name="vision"
-                type="textarea"
-                label="חזון המערך"
-                value={this.state.vision}
-                onChange={this.handleHeaderChange}
-              />
-
-              <MDBBtn
-                size="mg"
-                type="button"
-                color="green"
-                className="save-button"
-                onClick={this.handleHeaderEdit}
-              >
-                <MDBIcon icon="save" size="lg" />
-              </MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-          <MDBCard testimonial className="edit-card">
-            <MDBCardHeader>
-              <h4 className="card-name card-down">ערוך ייעוד המערך</h4>
-            </MDBCardHeader>
-            <MDBCardBody>
-              <MDBInput
-                name="purpose"
-                type="textarea"
-                label="ייעוד המערך"
-                value={this.state.purpose}
-                onChange={this.handleHeaderChange}
-              />
-              <MDBBtn
-                size="mg"
-                type="button"
-                color="green"
-                className="save-button"
-                onClick={this.handleHeaderEdit}
-              >
-                <MDBIcon icon="save" size="lg" />
-              </MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-          <MDBCard testimonial className="edit-card">
-            <MDBCardHeader>
-              <h4 className="card-name card-down">ערוך דבר המפקד</h4>
-            </MDBCardHeader>
-            <MDBCardBody>
-              <MDBInput
-                name="commander"
-                type="textarea"
-                label="דבר המפקד"
-                value={this.state.commander}
-                onChange={this.handleHeaderChange}
-              />
-              <MDBBtn
-                size="mg"
-                type="button"
-                color="green"
-                className="save-button"
-                onClick={this.handleHeaderEdit}
-              >
-                <MDBIcon icon="save" size="lg" />
-              </MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
+          {this.renderIdeals()}
         </MDBContainer>
         <MDBContainer
           fluid

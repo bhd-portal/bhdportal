@@ -91,7 +91,7 @@ class AdminSideNavBar extends Component {
             </MDBBtn>
           </MDBTooltip>
         </Link>
-        <Link to="/admin/gallery">
+        {/* <Link to="/admin/gallery">
           <MDBTooltip placement="left" tooltipContent="גלריה">
             <MDBBtn
               className={className(5)}
@@ -104,7 +104,7 @@ class AdminSideNavBar extends Component {
               <MDBIcon icon="images" size="md" />
             </MDBBtn>
           </MDBTooltip>
-        </Link>
+        </Link> */}
         <Link to="/admin/branches">
           <MDBTooltip placement="left" tooltipContent="ענפים">
             <MDBBtn
