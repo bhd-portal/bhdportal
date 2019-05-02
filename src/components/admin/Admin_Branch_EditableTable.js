@@ -14,7 +14,6 @@ import Axios from "axios";
 import { RootUrl } from "../constants";
 import Dragzone from "./Dragzone";
 
-
 class Admin_Branch_EditableTable extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +23,7 @@ class Admin_Branch_EditableTable extends Component {
       focused_index: undefined,
       name: "",
       icon: "",
-      href:"",
+      href: "",
       // editValues: { name: "", iconName: "", href: "" },
       branches: []
     };
@@ -58,7 +57,7 @@ class Admin_Branch_EditableTable extends Component {
       params: { category_id: this.props.category_id }
     })
       .then(res => {
-        this.setState({ branches: res.data, isLoading: false })
+        this.setState({ branches: res.data.branches, isLoading: false });
       })
       .catch(({ error }) => {
         this.setState({ error, isLoading: false });
@@ -186,10 +185,11 @@ class Admin_Branch_EditableTable extends Component {
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({  [name]: value  });
+    this.setState({ [name]: value });
   };
 
   render() {
+    console.log(this.state.branches);
     const products = this.state.branches.map(({ name }, index) => {
       return (
         <tr>

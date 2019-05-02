@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import EditableNav from "./EditableNav";
 import Admin_Branch_EditableTable from "./Admin_Branch_EditableTable";
 import { BranchRef } from "../constants";
-// _id: "1",
-// name: "Anna Doe",
-// iconName: "chess-pawn",
-// href: "/ab_guidance/chapter_1/מסמכים בבינה מלאכותית2.docx"
 
 class Admin_Branch extends Component {
   constructor(props) {
