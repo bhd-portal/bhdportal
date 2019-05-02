@@ -4,5 +4,5 @@ module.exports = {
   GalleryRef: "Gallery",
   BranchRef: "Branch",
   ProductRef: "Product",
-  RootUrl: "http://localhost:5003/api"
+  RootUrl: <BACKEND_URL>
 };
