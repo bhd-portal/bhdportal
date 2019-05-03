@@ -34,7 +34,7 @@ class Portal extends Component {
   };
 
   renderManagement() {
-    if(localStorage.getItem("token")) {
+    if (localStorage.getItem("token")) {
       return (
         <MDBNavItem>
           <MDBNavLink
@@ -45,17 +45,16 @@ class Portal extends Component {
             <i class="fas fa-user-cog ml-2" />
           </MDBNavLink>
         </MDBNavItem>
-      )
-    }
-    else {
+      );
+    } else {
       return;
     }
   }
 
   componentWillMount() {
-    if(localStorage.getItem("token")) {
+    if (localStorage.getItem("token")) {
       // user is logged
-      console.log("user is logged!!!")
+      console.log("user is logged!!!");
     }
   }
 
@@ -81,11 +80,13 @@ class Portal extends Component {
       name: this.state.name,
       password: this.state.password
     }).then(resp => {
-      if(!resp.data.success) { return; }
+      if (!resp.data.success) {
+        return;
+      }
       //write token into cookies
       localStorage.setItem("token", resp.data.token);
-      this.setState({modal2: false});
-    })
+      this.setState({ modal2: false });
+    });
   }
 
   toggleCollapse = collapseID => () =>
@@ -149,7 +150,7 @@ class Portal extends Component {
             >
               <MDBNavbarNav right style={{ fontSize: "18px" }}>
                 {this.renderManagement()}
-                <MDBNavItem>
+                {/* <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
                     to="/gallery"
@@ -157,7 +158,7 @@ class Portal extends Component {
                     גלריית התמונות
                     <i class="fas fa-images ml-2" />
                   </MDBNavLink>
-                </MDBNavItem>
+                </MDBNavItem> */}
                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
@@ -253,8 +254,8 @@ class Portal extends Component {
                     error="wrong"
                     success="right"
                     className="admin-name-pass"
-                    value={this.state.name} 
-                    onChange={ (e) => this.handleUsernameChange(e) }
+                    value={this.state.name}
+                    onChange={e => this.handleUsernameChange(e)}
                   />
                   <MDBInput
                     label="סיסמא"
@@ -263,14 +264,16 @@ class Portal extends Component {
                     validate
                     containerClass="mb-0"
                     className="admin-name-pass"
-                    value={this.state.password} 
-                    onChange={ (e) => this.handlePasswordChange(e) }
+                    value={this.state.password}
+                    onChange={e => this.handlePasswordChange(e)}
                   />
                   <div className="text-center mb-3 pr-5 pl-5">
                     <MDBBtn
                       type="button"
                       gradient="blue"
-                      onClick={() => {this.loginAccount()}}
+                      onClick={() => {
+                        this.loginAccount();
+                      }}
                       rounded
                       className="btn-block z-depth-1a admin-button"
                     >
