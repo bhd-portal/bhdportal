@@ -14,7 +14,6 @@ import Axios from "axios";
 import { RootUrl } from "../constants";
 import Dragzone from "./Dragzone";
 
-
 class Admin_Doc_EditableTable extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +23,7 @@ class Admin_Doc_EditableTable extends Component {
       focused_index: undefined,
       name: "",
       icon: "",
-      href:"",
-      // editValues: { name: "", iconName: "", href: "" },
+      href: "",
       documents: []
     };
 
@@ -69,9 +67,9 @@ class Admin_Doc_EditableTable extends Component {
     this.setState({ [modal]: !this.state[modal], focused_index });
     if (modal === "editModal") {
       if (focused_index !== undefined) {
-        this.setState({ editValues: this.state.documents[focused_index] });
+        this.setState(this.state.documents[focused_index]);
       } else {
-        this.setState({ editValues: { name: "", iconName: "", href: "" } });
+        this.setState({ name: "", icon: "", href: "" });
       }
     }
   };
@@ -185,7 +183,7 @@ class Admin_Doc_EditableTable extends Component {
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({  [name]: value  });
+    this.setState({ [name]: value });
   };
 
   render() {

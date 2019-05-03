@@ -4,22 +4,20 @@ import Axios from "axios";
 import { RootUrl } from "../constants";
 
 export default class Document extends Component {
-
-  downloadFile(href) { 
+  downloadFile(href) {
     var file = Axios.get(`${RootUrl}/file/${href}`);
-  } 
+  }
 
   render() {
-    const { name, iconName, href } = this.props;
-    console.log("href:", href);
+    const { name, icon, href } = this.props;
     return (
       <React.Fragment>
-        <button onClick={() => {this.downloadFile(href)}}>
+        <a href={href} download={name} className="documents-a-color">
           <MDBCard testimonial>
             <MDBCardUp className="card-up2" />
 
             <MDBAvatar className="docum-avatar mx-auto blue-gradient view-overlay text-center z-depth-2">
-              <MDBIcon size="3x" icon={iconName} className="docum-icon" />
+              <MDBIcon size="3x" icon={icon} className="docum-icon" />
             </MDBAvatar>
 
             <MDBCardBody>
@@ -28,7 +26,7 @@ export default class Document extends Component {
               </h4>
             </MDBCardBody>
           </MDBCard>
-        </button>
+        </a>
       </React.Fragment>
     );
   }
