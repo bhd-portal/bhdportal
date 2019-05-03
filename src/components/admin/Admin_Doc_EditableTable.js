@@ -147,36 +147,42 @@ class Admin_Doc_EditableTable extends Component {
           });
       }
     } else {
-      const data = new FormData();
-      data.append("file", this.state.file);
-      data.append("filename", this.state.file.name);
-      data.append("category", "documents");
-      Axios.post(`${RootUrl}/file`, data)
-        .then(res => {
-          const href = res.data.path;
-          Axios.post(`${RootUrl}/document`, {
-            category_id,
-            icon,
-            name,
-            href
-          })
-            .then(res => {
-              documents.push(res.data.document);
-
-              this.setState({ documents, isLoading: false });
-              toast.info("מסמך נוסף בהצלחה!");
+      if (!file) {
+        this.handleToggle("editModal")(e);
+        toast.error(" הוספת מסמך נכשלה!");
+        return;
+      } else {
+        const data = new FormData();
+        data.append("file", this.state.file);
+        data.append("filename", this.state.file.name);
+        data.append("category", "documents");
+        Axios.post(`${RootUrl}/file`, data)
+          .then(res => {
+            const href = res.data.path;
+            Axios.post(`${RootUrl}/document`, {
+              category_id,
+              icon,
+              name,
+              href
             })
-            .catch(err => {
-              this.setState({ error: err, isLoading: false });
-              toast.error(" הוספת מסמך נכשלה!");
-            });
-        })
-        .catch(error => {
-          this.handleToggle("editModal")(e);
-          this.setState({ error });
-          toast.error(" הוספת מסמך נכשלה!");
-          return;
-        });
+              .then(res => {
+                documents.push(res.data.document);
+
+                this.setState({ documents, isLoading: false });
+                toast.info("מסמך נוסף בהצלחה!");
+              })
+              .catch(err => {
+                this.setState({ error: err, isLoading: false });
+                toast.error(" הוספת מסמך נכשלה!");
+              });
+          })
+          .catch(error => {
+            this.handleToggle("editModal")(e);
+            this.setState({ error });
+            toast.error(" הוספת מסמך נכשלה!");
+            return;
+          });
+      }
     }
     this.handleToggle("editModal")(e);
   };
