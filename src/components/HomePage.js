@@ -18,6 +18,7 @@ import ProcductsList from "./ProcductsList";
 import BranchList from "./BranchList";
 import { Link } from "react-router-dom";
 import Axios from "axios";
+import { RootUrl } from "./constants";
 
 class HomePage extends Component {
   constructor(props) {
@@ -30,68 +31,33 @@ class HomePage extends Component {
       photoIndex: 0,
       isOpen: false,
       ideals: [],
-      branches: [
-        {
-          name: "מטה",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg"
-          // link: "#"
-        },
-        {
-          name: "ענף הדרכה",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: "ענף מקצועות הסיגינט",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: "ענף מודיעין השטח",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: 'מוד"ש ומחקר',
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: "ענף מפקדים",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: 'תחום ב"מ',
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: "ענף סייבר",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        },
-        {
-          name: "מפרשית",
-          imageURL: "https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg",
-          link: "#"
-        }
-      ],
+      branches: [],
       updates: [],
       isLoading: true
     };
 
     this.getUpdates();
+    this.getBranches();
     this.getIdeals();
   }
 
   getUpdates = () => {
-    Axios.get(`http://localhost:5003/api/news`)
+    Axios.get(`${RootUrl}/news`)
       .then(response => {
         this.setState({ updates: response.data, isLoading: false });
       })
       .catch(() => {
         this.setState({ error: "Error fetching posts", isLoading: false });
+      });
+  };
+
+  getBranches = () => {
+    Axios.get(`${RootUrl}/branch`)
+      .then(res =>
+        this.setState({ branches: res.data.branches, isLoading: false })
+      )
+      .catch(({ error }) => {
+        this.setState({ error, isLoading: false });
       });
   };
 
@@ -124,7 +90,7 @@ class HomePage extends Component {
   };
 
   getIdeals = () => {
-    Axios.get(`http://localhost:5003/api/ideals`)
+    Axios.get(`${RootUrl}/ideals`)
       .then(response => {
         this.setState({ ideals: response.data });
       })
