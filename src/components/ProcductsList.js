@@ -6,7 +6,7 @@ import Axios from "axios";
 const Product = ({ title, content, imageURL, link, className }) => {
   return (
     <MDBCol className={className}>
-      <a href={link}>
+      <a href={link} target="_blank">
         {" "}
         <div class="card card-cascade mb-4 ">
           <div class="view view-cascade overlay">

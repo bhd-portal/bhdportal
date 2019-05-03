@@ -23,6 +23,7 @@ class Admin_Prod_EditableTable extends Component {
       imageURL: "",
       title: "",
       content: "",
+      link: "",
       isLoading: true,
       error: undefined,
       products: []
@@ -78,14 +79,22 @@ class Admin_Prod_EditableTable extends Component {
 
   handleEdit = e => {
     const { subcategory_id } = this.props;
-    const { focused_index, products, imageURL, title, content } = this.state;
+    const {
+      focused_index,
+      products,
+      imageURL,
+      title,
+      content,
+      link
+    } = this.state;
     if (focused_index !== undefined) {
       Axios.patch(`${RootUrl}/product`, {
         subcategory_id,
         id: products[focused_index]._id,
         imageURL,
         title,
-        content
+        content,
+        link
       })
         .then(res => {
           products[focused_index] = res.data.product;
@@ -102,7 +111,8 @@ class Admin_Prod_EditableTable extends Component {
         subcategory_id,
         imageURL,
         title,
-        content
+        content,
+        link
       })
         .then(res => {
           products.push(res.data.product);
@@ -272,6 +282,17 @@ class Admin_Prod_EditableTable extends Component {
                 error="wrong"
                 success="right"
                 value={this.state.title}
+              />
+              <MDBInput
+                name="link"
+                onChange={this.handleChange}
+                label="קישור לתוצר"
+                group
+                type="text"
+                validate
+                error="wrong"
+                success="right"
+                value={this.state.link}
               />
               <MDBInput
                 name="content"
