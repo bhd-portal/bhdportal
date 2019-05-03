@@ -7,6 +7,8 @@ import {
   MDBModalBody,
   MDBModalFooter,
   MDBInput,
+  MDBContainer,
+  MDBTabContent,
   toast
 } from "mdbreact";
 import EditableBranchPhoto from "./EditableBranchPhoto";
@@ -150,19 +152,23 @@ class EditableBranchList extends React.Component {
 
   render() {
     return (
-      <div>
-        <MDBRow className="add-row text-center" center>
-          <MDBBtn
-            outline
-            rounded
-            color="primary"
-            size="lg"
-            onClick={this.handleToggle("editModal")}
-          >
-            <MDBIcon icon="plus" size="2x" />
-          </MDBBtn>
-        </MDBRow>
-        {this.renderBranches(this.state.branches)}
+      <React.Fragment>
+        <MDBContainer fluid className="text-center">
+          <MDBRow className="add-row text-center" center>
+            <MDBBtn
+              outline
+              rounded
+              color="primary"
+              size="lg"
+              onClick={this.handleToggle("editModal")}
+            >
+              <MDBIcon icon="plus" size="2x" />
+            </MDBBtn>
+          </MDBRow>
+          <MDBTabContent className="card">
+            {this.renderBranches(this.state.branches)}
+          </MDBTabContent>
+        </MDBContainer>
         <MDBModal
           className="form-elegant"
           isOpen={this.state.editModal}
@@ -231,7 +237,7 @@ class EditableBranchList extends React.Component {
           </MDBModalFooter>
         </MDBModal>
         <Toaster />
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -23,12 +23,12 @@ class Routes extends React.Component {
         <Route exact path="/gallery" component={GalleriesPage} />
         <Route exact path="/gallery/:id" component={GalleryPage} />
         <Route exact path="/products" component={ProductsPage} />
-        <Route exact path="/templates" component={TemplatesPage} />
-        <Route exact path="/branch" component={BranchExamplePage} />
+        {/* <Route exact path="/templates" component={TemplatesPage} />
+        <Route exact path="/branch" component={BranchExamplePage} /> */}
         <Route path="/admin" component={Admin} />
 
         {/*Branches Pages Paths */}
-        <Route exact path="/branches/:branch" component={BranchesPage} />
+        <Route exact path="/branches/:id" component={BranchesPage} />
         {/* Create a path for each branch page */}
         {/* Have here a component that passes props with the keyword: emek
       to a new component that would be generic for all the branches 

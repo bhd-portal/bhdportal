@@ -6,38 +6,41 @@ import {
   MDBBtn,
   MDBModalFooter,
   MDBIcon,
-  toast
+  toast,
+  MDBContainer,
+  MDBTabContent
 } from "mdbreact";
 import Toaster from "../Toaster";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import { RootUrl } from "../constants";
 
-class Admin_Prod_EditableTable extends Component {
+class Admin_Mador_EditableTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      branch_id: this.props.match.params.id,
       deleteModal: false,
       editModal: false,
       focused_index: undefined,
       imageURL: "",
-      title: "",
+      name: "",
       content: "",
       link: "",
+      description: "",
       isLoading: true,
       error: undefined,
-      products: []
+      madorim: []
     };
-
-    this.getProducts();
+    this.getMadorim();
   }
 
-  getProducts = () => {
-    Axios.get(`${RootUrl}/product`, {
-      params: { subcategory_id: this.props.subcategory_id }
+  getMadorim = () => {
+    Axios.get(`${RootUrl}/mador`, {
+      params: { branch_id: this.state.branch_id }
     })
       .then(res =>
-        this.setState({ products: res.data.products, isLoading: false })
+        this.setState({ madorim: res.data.madorim, isLoading: false })
       )
       .catch(({ error }) => {
         this.setState({ error, isLoading: false });
@@ -48,104 +51,92 @@ class Admin_Prod_EditableTable extends Component {
     this.setState({ [modal]: !this.state[modal], focused_index });
     if (modal === "editModal") {
       if (focused_index !== undefined) {
-        this.setState(this.state.products[focused_index]);
+        this.setState(this.state.madorim[focused_index]);
       } else {
-        this.setState({ imageURL: "", title: "", content: "", link: "" });
+        this.setState({
+          imageURL: "",
+          name: "",
+          content: "",
+          description: "",
+          link: ""
+        });
       }
     }
   };
 
   handleDelete = e => {
-    const { focused_index, products } = this.state;
-    const id = this.state.products[focused_index]._id;
-    Axios.delete(`${RootUrl}/product`, {
+    const { focused_index, madorim } = this.state;
+    const id = this.state.madorim[focused_index]._id;
+    Axios.delete(`${RootUrl}/mador`, {
       params: {
         id
       }
     })
       .then(res => {
         this.setState({
-          products: products.filter(elem => elem._id !== id),
+          madorim: madorim.filter(elem => elem._id !== id),
           isLoading: false
         });
-        toast.info("תוצר נמחק בהצלחה!");
+        toast.info("מדור נמחק בהצלחה!");
       })
       .catch(err => {
         this.setState({ error: err, isLoading: false });
-        toast.error("מחיקת תוצר נכשלה!");
+        toast.error("מחיקת מדור נכשלה!");
       });
     this.handleToggle("deleteModal")(e);
   };
 
   handleEdit = e => {
-    const { subcategory_id } = this.props;
+    const { branch_id } = this.state;
     const {
       focused_index,
-      products,
+      madorim,
       imageURL,
-      title,
+      name,
       content,
+      description,
       link
     } = this.state;
     if (focused_index !== undefined) {
-      Axios.patch(`${RootUrl}/product`, {
-        subcategory_id,
-        id: products[focused_index]._id,
+      Axios.patch(`${RootUrl}/mador`, {
+        branch_id,
+        id: madorim[focused_index]._id,
         imageURL,
-        title,
+        name,
         content,
+        description,
         link
       })
         .then(res => {
-          products[focused_index] = res.data.product;
-
-          this.setState({ products, isLoading: false });
-          toast.info("תוצר עודכן בהצלחה!");
+          madorim[focused_index] = res.data.mador;
+          this.setState({ madorim, isLoading: false });
+          toast.info("מדור עודכן בהצלחה!");
         })
         .catch(err => {
           this.setState({ error: err, isLoading: false });
-          toast.error("עדכון תוצר נכשל!");
+          toast.error("עדכון מדור נכשל!");
         });
     } else {
-      Axios.post(`${RootUrl}/product`, {
-        subcategory_id,
+      Axios.post(`${RootUrl}/mador`, {
+        branch_id,
         imageURL,
-        title,
+        name,
         content,
+        description,
         link
       })
         .then(res => {
-          products.push(res.data.product);
+          madorim.push(res.data.mador);
 
-          this.setState({ products, isLoading: false });
-          toast.info("תוצר נוסף בהצלחה!");
+          this.setState({ madorim, isLoading: false });
+          toast.info("מדור נוסף בהצלחה!");
         })
         .catch(err => {
           this.setState({ error: err, isLoading: false });
-          toast.error(" הוספת תוצר נכשלה!");
+          toast.error(" הוספת מדור נכשלה!");
         });
     }
     this.handleToggle("editModal")(e);
-  };
-
-  handleCheckbox = index => e => {
-    const { subcategory_id } = this.props;
-    const { products } = this.state;
-    Axios.patch(`${RootUrl}/product`, {
-      subcategory_id,
-      id: products[index]._id,
-      checked: e.target.checked
-    })
-      .then(res => {
-        products[index] = res.data.product;
-
-        this.setState({ products, isLoading: false });
-        toast.info("תוצר עודכן בהצלחה!");
-      })
-      .catch(err => {
-        this.setState({ error: err, isLoading: false });
-        toast.error("עדכון תוצר נכשל!");
-      });
   };
 
   handleChange = e => {
@@ -154,22 +145,13 @@ class Admin_Prod_EditableTable extends Component {
   };
 
   render() {
-    const products = this.state.products.map(({ title, checked }, index) => {
+    const madorim = this.state.madorim.map(({ name }, index) => {
       return (
         <tr>
           <td className="table-text" scope="row">
             {index}
           </td>
-          <td className="table-text">
-            <MDBInput
-              label="נבחר"
-              type="checkbox"
-              checked={checked}
-              id={`checkbox${index}`}
-              onChange={this.handleCheckbox(index)}
-            />
-          </td>
-          <td className="table-text">{title}</td>
+          <td className="table-text">{name}</td>
           <td className="table-edit-delete text-center">
             <Link
               rounded
@@ -193,39 +175,49 @@ class Admin_Prod_EditableTable extends Component {
     });
     return (
       <React.Fragment>
-        <table className="table table-hover table-striped">
-          <thead className="table-head">
-            <tr>
-              <th className="table-head" scope="col" width="10%">
-                #
-              </th>
-              <th className="table-head" scope="col" width="20%">
-                תוצר נבחר
-              </th>
-              <th className="table-head" scope="col" width="50%">
-                שם התוצר
-              </th>
-              <th className="table-head  text-center" scope="col" width="10%">
-                עריכה
-              </th>
-              <th className="table-head text-center" scope="col" width="10%">
-                מחיקה
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                colspan="100%"
-                style={{ color: "green", cursor: "pointer" }}
-                onClick={this.handleToggle("editModal")}
-              >
-                <MDBIcon icon="plus" size="lg" />
-              </td>
-            </tr>
-            {products}
-          </tbody>
-        </table>
+        <h1 className="h1-name mb-4 text-center">ניהול מדורים</h1>
+        <MDBContainer fluid className="text-center">
+          <MDBTabContent className="card">
+            <table className="table table-hover table-striped">
+              <thead className="table-head">
+                <tr>
+                  <th className="table-head" scope="col" width="10%">
+                    #
+                  </th>
+                  <th className="table-head" scope="col" width="50%">
+                    שם המדור
+                  </th>
+                  <th
+                    className="table-head  text-center"
+                    scope="col"
+                    width="10%"
+                  >
+                    עריכה
+                  </th>
+                  <th
+                    className="table-head text-center"
+                    scope="col"
+                    width="10%"
+                  >
+                    מחיקה
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    colspan="100%"
+                    style={{ color: "green", cursor: "pointer" }}
+                    onClick={this.handleToggle("editModal")}
+                  >
+                    <MDBIcon icon="plus" size="lg" />
+                  </td>
+                </tr>
+                {madorim}
+              </tbody>
+            </table>
+          </MDBTabContent>
+        </MDBContainer>
         <MDBModal
           className="form-elegant "
           isOpen={this.state.deleteModal}
@@ -257,7 +249,7 @@ class Admin_Prod_EditableTable extends Component {
             <section className="form-elegant">
               <div className="text-center">
                 <h1 className="dark-grey-text mb-5">
-                  <strong>ערוך תוצר הדרכה</strong>
+                  <strong>ערוך מדור</strong>
                 </h1>
               </div>
 
@@ -273,7 +265,7 @@ class Admin_Prod_EditableTable extends Component {
                 value={this.state.imageURL}
               />
               <MDBInput
-                name="title"
+                name="name"
                 onChange={this.handleChange}
                 label="שם"
                 group
@@ -281,12 +273,12 @@ class Admin_Prod_EditableTable extends Component {
                 validate
                 error="wrong"
                 success="right"
-                value={this.state.title}
+                value={this.state.name}
               />
               <MDBInput
                 name="link"
                 onChange={this.handleChange}
-                label="קישור לתוצר"
+                label="קישור לאתר המדור (אופציונלי)"
                 group
                 type="text"
                 validate
@@ -295,7 +287,7 @@ class Admin_Prod_EditableTable extends Component {
                 value={this.state.link}
               />
               <MDBInput
-                name="content"
+                name="description"
                 onChange={this.handleChange}
                 label="תיאור"
                 group
@@ -304,9 +296,21 @@ class Admin_Prod_EditableTable extends Component {
                 validate
                 error="wrong"
                 success="right"
+                value={this.state.description}
+              />
+              <MDBInput
+                name="content"
+                onChange={this.handleChange}
+                label="תיאור מורחב"
+                group
+                type="textarea"
+                rows={2}
+                validate
+                error="wrong"
+                success="right"
                 value={this.state.content}
               />
-              <div className="mb-3 pr-5 pl-5">
+              <div className="mb-3 pr-5 pl-5" מורחב>
                 <MDBBtn type="button" onClick={this.handleToggle("editModal")}>
                   <MDBIcon icon="times" size="lg" />
                 </MDBBtn>
@@ -322,4 +326,4 @@ class Admin_Prod_EditableTable extends Component {
     );
   }
 }
-export default Admin_Prod_EditableTable;
+export default Admin_Mador_EditableTable;

@@ -2,12 +2,12 @@ import React from "react";
 import LinkPhotoFlipBranch from "./LinkPhotoFlipBranch";
 import { MDBRow } from "mdbreact";
 
-const MadorsList = ({ madors }) => {
-  const firstRow = madors.slice(0, 5).map(mador => {
+const MadorsList = ({ madorim }) => {
+  const firstRow = madorim.slice(0, 5).map(mador => {
     return <LinkPhotoFlipBranch {...mador} />;
   });
 
-  const secondRow = madors.slice(5, madors.length).map(mador => {
+  const secondRow = madorim.slice(5, madorim.length).map(mador => {
     return <LinkPhotoFlipBranch {...mador} />;
   });
 

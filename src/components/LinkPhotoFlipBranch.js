@@ -3,12 +3,8 @@ import {
   MDBCardBody,
   MDBIcon,
   MDBCard,
-  MDBCardUp,
-  MDBAvatar,
-  MDBRow,
   MDBCol,
   MDBCardImage,
-  MDBBtn,
   MDBCardText,
   MDBCardTitle,
   MDBRotatingCard
@@ -23,8 +19,6 @@ class LinkPhotoFlipBranch extends Component {
     this.setState({ flipped: !this.state.flipped });
   };
   render() {
-    const branchSize = 130;
-    const { mador_name, front_text, back_text } = this.props;
     const colStyle = { maxWidth: "22rem" };
 
     return (
@@ -36,41 +30,36 @@ class LinkPhotoFlipBranch extends Component {
             style={colStyle}
           >
             <MDBCard className="cascade face front">
-              {/* <MDBCardUp>
-                  <img
-                    className="card-img-top"
-                    src="https://mdbootstrap.com/img/Photos/Others/photo7.jpg"
-                    alt=""
-                  />
-                </MDBCardUp> */}
               <MDBCardImage
                 cascade
                 className="img-fluid"
-                src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%282%29.jpg"
+                src={this.props.imageURL}
               />
 
               <MDBCardBody cascade>
                 <MDBCardTitle className="font-weight-bold mb-3">
-                  {/* get the name of the MADOR from props - pass props to components in React */}
-                  {this.props.mador_name}
+                  {console.log(this.props.link)}
+                  <a
+                    href={this.props.link == "" ? "#" : this.props.link}
+                    className="rotate-btn"
+                    data-card="card-1"
+                    target={this.props.link == "" ? "_self" : "_blank"}
+                  >
+                    {this.props.name}
+                  </a>
                 </MDBCardTitle>
-                <MDBCardText>{this.props.front_text}</MDBCardText>
-
-                <a
-                  href="#!"
-                  className="rotate-btn"
-                  data-card="card-1"
-                  onClick={this.handleFlipping}
-                >
-                  <MDBIcon icon="redo" /> קרא עוד עלינו
-                </a>
+                <MDBCardText>{this.props.description}</MDBCardText>
+                <div style={{ cursor: "pointer", color: "#2196f3 " }}>
+                  <MDBIcon icon="redo" onClick={this.handleFlipping} />{" "}
+                  <span onClick={this.handleFlipping}>קרא עוד עלינו</span>
+                </div>
               </MDBCardBody>
             </MDBCard>
             <MDBCard className="face back">
               <MDBCardBody>
                 <h4 className="font-weight-bold">קצת עלינו ...</h4>
                 <hr />
-                <p>{this.props.back_text}</p>
+                <p>{this.props.content}</p>
                 <hr />
 
                 <a
