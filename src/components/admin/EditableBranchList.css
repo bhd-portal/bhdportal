@@ -1,0 +1,9 @@
+.add-row {
+  position: relative;
+  margin: 3% 0;
+  direction: rtl;
+}
+
+div.icons {
+  cursor: pointer;
+}

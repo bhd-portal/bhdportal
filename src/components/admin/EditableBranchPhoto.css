@@ -1,0 +1,27 @@
+.branch-container {
+  position: relative;
+}
+
+div.icons {
+  position: absolute;
+  display: inline;
+  top: 0%;
+  left: 12%;
+  visibility: hidden;
+}
+
+.branch-icon {
+  display: inline-block;
+  margin: 0;
+  margin-right: 5px;
+  padding: 0 !important;
+  transition: transform 0.2s;
+}
+
+.branch-icon:hover {
+  transform: scale(1.3);
+}
+
+.branch-container:hover div.icons {
+  visibility: visible;
+}
