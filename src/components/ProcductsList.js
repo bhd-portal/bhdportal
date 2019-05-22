@@ -8,7 +8,7 @@ const Product = ({ title, content, imageURL, link, className }) => {
     <MDBCol className={className}>
       <a href={link} target="_blank">
         {" "}
-        <div class="card card-cascade mb-4 ">
+        <div class="card card-cascade mb-4 " style={{height: "350px"}}>
           <div class="view view-cascade overlay">
             <img class="card-img-top" src={imageURL} alt="Card image cap" />
             <a>

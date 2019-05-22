@@ -120,11 +120,26 @@ class AdminSideNavBar extends Component {
             </MDBBtn>
           </MDBTooltip>
         </Link>
+        <Link to="/admin/powerpoint">
+          <MDBTooltip placement="left" tooltipContent="מצגות">
+            <MDBBtn
+              className={className(6)}
+              onClick={() => this.setState({ activeTab: 7 })}
+              onMouseEnter={this.onHover}
+              onMouseLeave={this.onMouseLeave}
+              floating
+              color="blue"
+            >
+              {" "}
+              <MDBIcon icon="file-powerpoint" size="md" />
+            </MDBBtn>
+          </MDBTooltip>
+        </Link>
         <Link to="/admin/advanced">
           <MDBTooltip placement="left" tooltipContent="מתקדם">
             <MDBBtn
               className={className(7)}
-              onClick={() => this.setState({ activeTab: 7 })}
+              onClick={() => this.setState({ activeTab: 8 })}
               onMouseEnter={this.onHover}
               onMouseLeave={this.onMouseLeave}
               floating

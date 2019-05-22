@@ -1440,7 +1440,7 @@ button.bg-secondary:focus {
   border-color: #aa66cc !important; }
 
 .bg-dark {
-  background-color: #212121 !important; }
+  background-color: #fff !important; }
 
 a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,

@@ -14,7 +14,7 @@ class ProductsPage extends Component {
     return (
       <React.Fragment>
         <HeaderImage
-          imageLink="https://mdbootstrap.com/img/Photos/Slides/img%20(137).jpg"
+          imageLink={require('../assets/product-header.png')}
           title="קטלוג תוצרי הדרכה"
         />
         <NavComponent
@@ -23,7 +23,7 @@ class ProductsPage extends Component {
             <SubNavComponent
               category_id={category_id}
               render={subcategory_id => (
-                <MDBRow center className="products-row2">
+                <MDBRow className="products-row2">
                   <ProcductsList
                     type="col-3 products-col"
                     subcategory_id={subcategory_id}

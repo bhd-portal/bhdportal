@@ -8,14 +8,17 @@
   src: url("../assets/Alef/Alef-Regular.ttf");
   font-weight: 400;
 }
+@import url('https://fonts.googleapis.com/css?family=Secular+One&display=swap');
+
+
 
 body {
   font-family: "Assistant", sans-serif;
-  background-color: #f9f9f9 !important;
+  background-color: #fff !important;
   direction: "rtl" !important;
 }
 .nav-bg {
-  background-color: #f9f9f9 !important;
+  background-color: #fff !important;
 }
 /* 
 .navbar.navbar-dark .navbar-nav .nav-item .nav-link {
@@ -64,6 +67,7 @@ margin-right: -30px; */
 
 .container-fluid {
   width: 80%;
+  margin-bottom: 20px;
 }
 
 .products-row2 {
@@ -228,12 +232,15 @@ margin-right: -30px; */
 }
 
 .front-page-title {
-  font-size: 6rem !important;
-  font-family: "Alef", sans-serif !important;
+  font-size: 4.5rem !important;
+  font-family: 'Secular One', sans-serif !important;
   text-align: right !important;
+  font-weight: 400;
+  color: #2e2e2e;
 }
 
 .video-intro {
+  margin-top: 30px;
   right: 0% !important;
 }
 video {

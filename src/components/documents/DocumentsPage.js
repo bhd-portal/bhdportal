@@ -25,7 +25,6 @@ class Document extends Component {
   }
 
   render() {
-    console.log(this.state.documents);
     return (
       <Documents
         documents={this.state.documents}
@@ -40,7 +39,7 @@ const Documents = ({ documents }) => {
       <React.Fragment>
         <MDBCol
           className="mt-4"
-          style={{ maxWidth: "15rem", minWidth: "15rem" }}
+          style={{ maxWidth: "15rem", minWidth: "15rem", padding: "20px" }}
         >
           <DocumentBullet {...document} />
         </MDBCol>{" "}

@@ -1,5 +1,15 @@
-body {
-	background:#ededed;
+body,
+html {
+  height: 100%;
+  background: #ededed;
+}
+
+.bg {
+  background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg");
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 a.border.nav-link.border-light.rounded.mr-1 {
@@ -10,14 +20,15 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
   color: #1C2331;
 }
 
-.btn.btn-sm.indigo:hover{
+.btn.btn-sm.indigo:hover {
   color: #fff;
 }
 
-.nav-link.active{
+.nav-link.active {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-#categories > .col-md-4.mb-5{
+#categories>.col-md-4.mb-5 {
   margin-bottom: 8rem !important;
 }
+

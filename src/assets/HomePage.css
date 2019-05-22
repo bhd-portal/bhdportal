@@ -25,4 +25,6 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
 #front-page-title-row {
   position: absolute;
   right: 5%;
+  top: 40%;
+  z-index: 1;
 }

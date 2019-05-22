@@ -10,15 +10,15 @@ class BranchPhoto extends Component {
     const { name, imageURL, _id } = this.props;
     return (
       <React.Fragment>
-        <MDBCol className="col-branch-photo" style={{ margin: "0 3%" }}>
+        <MDBCol className="col-branch-photo" style={{ margin: "10px 50px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <Link to={`branches/${_id}`}>
             <img
               src={imageURL}
-              className="rounded-circle img-fluid mx-auto mb-4 z-depth-2"
-              height={branchSize}
-              width={branchSize}
+              className="img-fluid mx-auto mb-4"
+              style={{width: "80px"}}
+              width="60px"
             />
-            <h3>{name}</h3>
+            <h3 className="headline-text-color">{name}</h3>
           </Link>
         </MDBCol>
       </React.Fragment>

@@ -35,6 +35,7 @@ class Admin_Doc_EditableTable extends Component {
   };
 
   uploadFiles = () => {
+    console.log("UPLOAD FILES STARTED");
     if (!this.state.file) {
       return alert("No file");
     }

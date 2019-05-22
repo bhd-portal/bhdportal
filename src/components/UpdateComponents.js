@@ -23,7 +23,7 @@ export const UpdateBullet = props => {
         />
       </MDBCollapseHeader>
       <MDBCollapse id={id} isOpen={collapseID}>
-        <MDBCardBody className="text-right">{text}</MDBCardBody>
+        <MDBCardBody className="text-right"><span className="font-md">{text}</span></MDBCardBody>
       </MDBCollapse>
     </MDBCard>
   );

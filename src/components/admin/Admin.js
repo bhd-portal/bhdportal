@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import Admin_ABGuidance from "./Admin_ABGuidance";
 import Admin_Advanced from "./Admin_Advanced";
+import Admin_Powerpoint from "./Admin_Powerpoint";
 import Admin_Documents from "./Admin_Documents";
 import Admin_Gallery from "./Admin_Gallery";
 import Admin_Branches from "./Admin_Branches";
@@ -29,6 +30,7 @@ class Admin extends Component {
               path="/admin/ab_guidance"
               component={Admin_ABGuidance}
             />
+            <Route exact path="/admin/powerpoint" component={Admin_Powerpoint} />
             <Route exact path="/admin/documents" component={Admin_Documents} />
             <Route exact path="/admin/gallery" component={Admin_Gallery} />
             <Route exact path="/admin/branches" component={Admin_Branches} />

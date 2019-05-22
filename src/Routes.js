@@ -8,6 +8,7 @@ import DocumentsPage from "./components/documents/DocumentsPage";
 import GalleryPage from "./components/GalleryPage";
 import GalleriesPage from "./components/GalleriesPage";
 import ProductsPage from "./components/ProductsPage";
+import PowerpointPage from "./components/powerpoint/PowerpointPage";
 import TemplatesPage from "./components/TemplatesPage";
 import BranchExamplePage from "./components/BranchExamplePage";
 import Admin from "./components/admin/Admin";
@@ -20,6 +21,7 @@ class Routes extends React.Component {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/ab_guidance" component={ABGuidancePage} />
         <Route exact path="/documents" component={DocumentsPage} />
+        <Route exact path="/powerpoint" component={PowerpointPage} />
         <Route exact path="/gallery" component={GalleriesPage} />
         <Route exact path="/gallery/:id" component={GalleryPage} />
         <Route exact path="/products" component={ProductsPage} />

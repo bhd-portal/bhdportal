@@ -107,7 +107,8 @@ const BreadcrumbPage = props => {
 
       <MDBNavbar
         color="indigo"
-        style={{ marginTop: "20px" }}
+        style={{ marginTop: "20px"}}
+        className=" scrolling-navbar"
         dark
       >
         <span className="navbar-toggler-icon" />

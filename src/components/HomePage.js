@@ -10,7 +10,7 @@ import {
 } from "mdbreact";
 import "../assets/HomePage.css";
 import "../pages/pro/sections/VideoBackgroundPage.css";
-import bgvideo from "../assets/bgvideo.mp4";
+import bgImage from "../assets/background-new.png";
 import Lightbox from "react-image-lightbox";
 import UpdateBox from "./UpdateBox";
 import "../assets/Lightbox.css";
@@ -24,7 +24,7 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bgvideo: bgvideo,
+      bgImage: bgImage,
       title: "פורטל מערך ההדרכה",
       subtitle: "למודיעין ולסייבר",
       collapseID: "",
@@ -126,16 +126,9 @@ class HomePage extends Component {
     }
     return (
       <React.Fragment>
-        <div id="videobackground">
+        <div id="videobackground" >
           <MDBView>
-            <video className="video-intro" playsInline autoPlay muted loop>
-              <source src={this.state.bgvideo} type="video/mp4" />
-            </video>
-            <MDBMask
-              className="d-flex align-items-center"
-              overlay="black-light"
-            >
-              <MDBRow id="front-page-title-row" className="">
+          <MDBRow id="front-page-title-row" className="">
                 <MDBCol md="12" className="mb-4 white-text front-page-title">
                   {" "}
                   <p className=" front-page-title font-weight-bold mb-1">
@@ -145,13 +138,17 @@ class HomePage extends Component {
                     {this.state.subtitle}
                   </p>
                 </MDBCol>
-              </MDBRow>
-            </MDBMask>
+          </MDBRow>
+
+            <div className="video-intro" playsInline autoPlay muted loop>
+              <img src={bgImage} style={{ width: "100%"}}/>
+            </div>
+
           </MDBView>
         </div>
         <BranchList branches={branches} />
         <h2
-          className="text-right"
+          className="text-right headline-text-color"
           style={{ marginRight: "2%", marginTop: "3%" }}
         >
           :עדכוני מערך ההדרכה

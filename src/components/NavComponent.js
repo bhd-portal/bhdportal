@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   MDBNav,
-  MDBContainer,
   MDBTabPane,
   MDBTabContent,
   MDBNavItem,
@@ -68,7 +67,7 @@ class NavComponent extends Component {
       );
     });
     const nav_contents = categories.map(({ _id }, index) => (
-      <MDBTabPane tabId={`${parseInt(index) + 1}`} role="tabpanel">
+      <MDBTabPane tabId={`${parseInt(index) + 1}`} role="tabpanel" style={{marginBottom: "unset"}}>
         {" "}
         {render(_id)}
       </MDBTabPane>
@@ -76,22 +75,22 @@ class NavComponent extends Component {
 
     return (
       <React.Fragment>
-        <MDBContainer fluid className="text-center">
+        <div className="classic-tabs text-center" style={{direction: "rtl"}}>
           <MDBNav
-            tabs
+            classicTabs
             className="nav-justified upper-navigation"
-            color="indigo"
+            style={{boxShadow: "unset"}}
           >
             {nav_items}
           </MDBNav>
           <MDBTabContent
             className="card"
             activeItem={this.state.activeTab}
-            className="text-center my-5 inner-nav-tab-pane"
-          >
+            className="text-center inner-nav-tab-pane"
+          style={{padding: "unset", margin: "unset" }}>
             {nav_contents}
           </MDBTabContent>
-        </MDBContainer>
+        </div>
       </React.Fragment>
     );
   }

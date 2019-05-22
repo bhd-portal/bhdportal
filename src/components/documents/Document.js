@@ -16,8 +16,8 @@ export default class Document extends Component {
           <MDBCard testimonial>
             <MDBCardUp className="card-up2" />
 
-            <MDBAvatar className="docum-avatar mx-auto blue-gradient view-overlay text-center z-depth-2">
-              <MDBIcon size="3x" icon={icon} className="docum-icon" />
+            <MDBAvatar className="docum-avatar mx-auto default-color view-overlay text-center z-depth-1">
+              <MDBIcon size="2x" icon={icon} className="docum-icon" />
             </MDBAvatar>
 
             <MDBCardBody>

@@ -266,7 +266,7 @@ class Admin_Gallery extends Component {
             <tbody>
               <tr>
                 <td
-                  colspan="100%"
+                  colSpan="100%"
                   style={{ color: "green", cursor: "pointer" }}
                   onClick={this.handleToggle("editModal")}
                 >

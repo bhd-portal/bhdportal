@@ -13,7 +13,7 @@ import {
   MDBInput,
   MDBBtn
 } from "mdbreact";
-import { ReactComponent as Logo } from "./assets/intelLogo.svg";
+import logo from "./logo.png";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Routes from "./Routes";
 import "./assets/portal_stylesheet.css";
@@ -42,7 +42,7 @@ class Portal extends Component {
             to="/admin"
           >
             ניהול
-            <i class="fas fa-user-cog ml-2" />
+            <i className="fas fa-user-cog ml-2" />
           </MDBNavLink>
         </MDBNavItem>
       );
@@ -126,7 +126,8 @@ class Portal extends Component {
     return (
       <Router>
         <div className="flyout">
-          <MDBNavbar
+        <MDBNavbar color="bg-dark" fixed="top" dark expand="md" scrolling transparent>
+          {/* <MDBNavbar
             color="tabs-blue"
             dark
             expand="md"
@@ -136,9 +137,9 @@ class Portal extends Component {
               paddingTop: "0px",
               paddingBottom: "0px"
             }}
-          >
+          > */}
             <MDBNavbarBrand href="/">
-              <Logo style={{ height: "2.5rem", width: "2.5rem" }} />
+              <img src={logo} style={{height: "2.5rem", width: "3.2rem"}}/> 
             </MDBNavbarBrand>
             <MDBNavbarToggler
               onClick={this.toggleCollapse("mainNavbarCollapse")}
@@ -156,16 +157,25 @@ class Portal extends Component {
                     to="/gallery"
                   >
                     גלריית התמונות
-                    <i class="fas fa-images ml-2" />
+                    <i className="fas fa-images ml-2" />
                   </MDBNavLink>
                 </MDBNavItem> */}
+                                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse("mainNavbarCollapse")}
+                    to="/powerpoint"
+                  >
+                    מצגות
+                    <i className="fas fa-paperclip ml-2" />
+                  </MDBNavLink>
+                </MDBNavItem>
                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
                     to="/documents"
                   >
                     טפסים נפוצים
-                    <i class="fas fa-paperclip ml-2" />
+                    <i className="fas fa-paperclip ml-2" />
                   </MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
@@ -174,7 +184,7 @@ class Portal extends Component {
                     to="/ab_guidance"
                   >
                     א"ב בהדרכה
-                    <i class="fab fa-leanpub ml-2" />
+                    <i className="fab fa-leanpub ml-2" />
                   </MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
@@ -183,7 +193,7 @@ class Portal extends Component {
                     to="/forums"
                   >
                     פורומים
-                    <i class="fas fa-user-friends ml-2" />
+                    <i className="fas fa-user-friends ml-2" />
                   </MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
@@ -192,7 +202,7 @@ class Portal extends Component {
                     to="/mooc"
                   >
                     MOOC
-                    <i class="fas fa-graduation-cap ml-2" />
+                    <i className="fas fa-graduation-cap ml-2" />
                   </MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
@@ -201,7 +211,7 @@ class Portal extends Component {
                     to="/products"
                   >
                     קטלוג תוצרי הדרכה
-                    <i class="fas fa-dice-d6 ml-2" />
+                    <i className="fas fa-dice-d6 ml-2" />
                   </MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
@@ -210,7 +220,7 @@ class Portal extends Component {
                     to="/"
                     onClick={this.closeCollapse("mainNavbarCollapse")}
                   >
-                    <i class="fas fa-home " style={{ fontSize: "23px" }} />
+                    <i className="fas fa-home " style={{ fontSize: "23px" }} />
                   </MDBNavLink>
                 </MDBNavItem>
               </MDBNavbarNav>
@@ -262,7 +272,7 @@ class Portal extends Component {
                     group
                     type="password"
                     validate
-                    containerClass="mb-0"
+                    containerclassName="mb-0"
                     className="admin-name-pass"
                     value={this.state.password}
                     onChange={e => this.handlePasswordChange(e)}
