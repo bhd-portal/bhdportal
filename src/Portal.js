@@ -188,22 +188,26 @@ class Portal extends Component {
                   </MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
-                  <MDBNavLink
+                  <a
                     onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/forums"
+                    href="http://www.google.com"
+                    target="_blank"
+                    class="nav-link Ripple-parent"
                   >
                     פורומים
                     <i className="fas fa-user-friends ml-2" />
-                  </MDBNavLink>
+                  </a>
                 </MDBNavItem>
                 <MDBNavItem>
-                  <MDBNavLink
+                  <a
                     onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/mooc"
+                    href="http://www.mooc-two.d8200.mil"
+                    target="_blank"
+                    class="nav-link Ripple-parent"
                   >
                     MOOC
                     <i className="fas fa-graduation-cap ml-2" />
-                  </MDBNavLink>
+                  </a>
                 </MDBNavItem>
                 <MDBNavItem>
                   <MDBNavLink
@@ -233,14 +237,20 @@ class Portal extends Component {
           <MDBFooter
             color="special-color"
             align="right"
-            style={{ direction: "rtl" }}
+            style={{ display: "flex", direction: "rtl" }}
+            className="justify-space-between center-items-v"
           >
             <p className="footer-copyright mb-0 py-3 text-center">
               <Link rounded onClick={this.toggle(2)} to="#">
                 &copy;
               </Link>{" "}
-              {new Date().getFullYear()} Copyright: ArTech - Orel, Coral & Nadav
+              {new Date().getFullYear()} Copyright
             </p>
+
+            <p className="footer-copyright mb-0 py-3">
+               Crafted With &hearts; Aviv Day, Nadav, Orel &amp; Coral
+            </p>
+            <img className="footer-copyright" src={require('./images/artech.png')} width="70px" />
 
             <MDBModal
               className="form-elegant "

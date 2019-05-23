@@ -8,35 +8,40 @@ import {
   MDBContainer
 } from "mdbreact";
 
+
+
 export const UpdateBullet = props => {
-  const { collapseID, id, name, text, toggleCollapse } = props;
+  const { collapseID, id, date, name, text, toggleCollapse } = props;
+  const newDate = date.get; // format date here
   return (
-    <MDBCard className="mt-3">
-      <MDBCollapseHeader className="text-right" onClick={toggleCollapse(id)}>
-        {name}
-        <i
+    <MDBCol className="mt-3" style={{borderBottom: "1.5px solid #ccc", padding: "15px"}}>
+
+      <div className="justify-space-between text-right cursor-pointer" onClick={toggleCollapse(id)}>
+        <div style={{display: "flex", flexDirection:"column"}}>
+        <span style={{fontSize: "1.3rem"}}>{name}</span>
+        <span>{ newDate }</span>
+        </div>
+        <i style={{fontSize: "1.5rem", color: "rgba(255, 51, 102)"}}
           className={
             collapseID === id
-              ? "fa fa-angle-down rotate-icon ml-3"
-              : "fa fa-angle-down ml-3"
+              ? "fa fa-minus rotate-icon ml-3"
+              : "fa fa-plus ml-3"
           }
         />
-      </MDBCollapseHeader>
+      </div>
       <MDBCollapse id={id} isOpen={collapseID}>
         <MDBCardBody className="text-right"><span className="font-md">{text}</span></MDBCardBody>
       </MDBCollapse>
-    </MDBCard>
+    </MDBCol>
   );
 };
 
 export const UpdateCol = props => {
   return (
-    <MDBCol>
-      <MDBCard>
+    <MDBCol className="no-padding">
         <MDBContainer className="md-accordion mt-0">
           {props.children}
         </MDBContainer>
-      </MDBCard>
     </MDBCol>
   );
 };

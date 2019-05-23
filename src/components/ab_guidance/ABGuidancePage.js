@@ -16,7 +16,7 @@ class ABGuidancePage extends Component {
     return (
       <React.Fragment>
         <HeaderImage
-          imageLink="https://mdbootstrap.com/img/Photos/Slides/img%20(138).jpg"
+          imageLink={require('../../assets/abguidance-header.png')}
           title='א"ב בהדרכה'
         />
         <NavComponent

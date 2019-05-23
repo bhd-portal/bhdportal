@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { MDBContainer, MDBIcon, MDBRow, MDBCol } from "mdbreact";
 
 class Admin_Advanced extends Component {
+
   componentDidMount() {
     window.scrollTo(0, 0);
   }
+
 
   render() {
     return (
@@ -62,10 +64,9 @@ class Admin_Advanced extends Component {
                 </div>
               </div>
             </MDBCol>
-            <MDBCol>
+            {/* <MDBCol>
               <div className="card mx-xl-5">
                 <div className="card-body">
-                  <form>
                     <p className="h4 text-center py-4">עדכון קישור ל MOOC</p>
                     <label
                       htmlFor="defaultFormCardNameEx"
@@ -74,18 +75,17 @@ class Admin_Advanced extends Component {
                       קישור חדש
                     </label>
                     <input
-                      type="password"
+                      type="text"
                       id="defaultFormCardNameEx"
                       className="form-control "
                     />
 
                     <div className="text-center py-4 mt-3">
-                      <button className="btn btn-outline-blue" type="submit">
+                      <button className="btn btn-outline-blue" type="submit" onClick={() => { this.updateMoocLink() }}>
                         <MDBIcon icon="save" className="ml-2" />
                         עדכן
                       </button>
                     </div>
-                  </form>
                 </div>
               </div>
             </MDBCol>
@@ -115,7 +115,7 @@ class Admin_Advanced extends Component {
                   </form>
                 </div>
               </div>
-            </MDBCol>
+            </MDBCol> */}
           </MDBRow>
         </MDBContainer>{" "}
       </React.Fragment>

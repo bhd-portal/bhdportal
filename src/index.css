@@ -84,13 +84,28 @@ h1, h2, h3, h4, h5, h6 {
   color: #2e2e2e;
 }
 
+.classic-tabs .nav li a:hover {
+  border-bottom: 3px solid #e0e0e0 !important;
+  border-radius: 2px;
+  transition: unset !important;
+}
+
+.classic-tabs .nav li a:not(.active) {
+  margin: unset !important;
+}
 .classic-tabs .nav li a.active {
   border-bottom: 3px solid rgba(255, 51, 102) !important;
   color: #2e2e2e !important;
 }
 
+
 .card {
   box-shadow: 3px 3px 10px -4px #888 !important;
+}
+
+.card-header {
+  background-color: unset !important;
+  border-bottom: 1.5px solid rgba(0,0,0,.125) !important;
 }
 
 .card.card-cascade .view.view-cascade {
@@ -103,12 +118,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .header-title {
   position: absolute;
-  top: -270px;
-  left: 50%;
+  top: -250px;
+  left: 60%;
   font-size: 4.5rem;
 }
 
-@media (max-width: 1376px) {
+@media (max-width: 1496px) {
   .header-title {
     position: absolute;
     top: -250px;

@@ -13,11 +13,8 @@ import Toaster from "../Toaster";
 import Axios from "axios";
 import { RootUrl } from "../constants";
 import Dragzone from "./Dragzone";
-import { MDBFileInput } from "mdbreact";
 
-
-
-class Admin_Ppt_EditableTable extends Component {
+class Admin_Doc_EditableTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +22,7 @@ class Admin_Ppt_EditableTable extends Component {
       editModal: false,
       focused_index: undefined,
       name: "",
-      imageHref: "powerpoint/noimage.png",
+      icon: "",
       href: "",
       powerpoints: []
     };
@@ -38,6 +35,7 @@ class Admin_Ppt_EditableTable extends Component {
   };
 
   uploadFiles = () => {
+    console.log("UPLOAD FILES STARTED");
     if (!this.state.file) {
       return alert("No file");
     }
@@ -53,30 +51,6 @@ class Admin_Ppt_EditableTable extends Component {
         this.setState({ error });
       });
   };
-
-
-  handleImages = imageFiles => {
-    this.setState({ imageFile: imageFiles[0] });
-  };
-
-  uploadImages = () => {
-    if (!this.state.imageFile) {
-      return alert("No file");
-    }
-    const data = new FormData();
-    data.append("file", this.state.imageFile);
-    data.append("filename", this.state.imageFile.name);
-    data.append("category", "powerpointsImages");
-    console.log(this.state);
-    Axios.post(`${RootUrl}/file`, data)
-      .then(res => {
-        this.setState({ imageHref: res.data.path });
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-  };
-
 
   getPowerpoints = () => {
     Axios.get(`${RootUrl}/powerpoint`, {
@@ -96,7 +70,7 @@ class Admin_Ppt_EditableTable extends Component {
       if (focused_index !== undefined) {
         this.setState(this.state.powerpoints[focused_index]);
       } else {
-        this.setState({ name: "", imageHref: "", href: "" });
+        this.setState({ name: "", icon: "", href: "" });
       }
     }
   };
@@ -126,29 +100,20 @@ class Admin_Ppt_EditableTable extends Component {
 
   handleEdit = e => {
     const { category_id } = this.props;
-    const { focused_index, powerpoints, name, file, imageHref } = this.state;
-    console.log(this.state);
+    const { focused_index, powerpoints, name, file, icon } = this.state;
     if (focused_index !== undefined) {
       if (file) {
         const data = new FormData();
-        const imgData = new FormData();
         data.append("file", this.state.file);
         data.append("filename", this.state.file.name);
         data.append("category", "powerpoints");
-        imgData.append("file", this.state.imageFile);
-        imgData.append("filename", this.state.imageFile.name);
-        imgData.append("category", "powerpoints");    
-        console.log(this.state);
-        console.log(imgData);    
         Axios.post(`${RootUrl}/file`, data).then(res => {
           const href = res.data.path;
-        Axios.post(`${RootUrl}/file`, imgData).then(imgRes => {
-          const imageHref = imgRes.data.path;
           Axios.patch(`${RootUrl}/powerpoint`, {
             category_id,
             id: powerpoints[focused_index]._id,
             name,
-            imageHref,
+            icon,
             href
           })
             .then(res => {
@@ -162,14 +127,13 @@ class Admin_Ppt_EditableTable extends Component {
               toast.error("עדכון מסמך נכשל!");
             });
         });
-      });
       } else {
         let { href } = this.state;
         Axios.patch(`${RootUrl}/powerpoint`, {
           category_id,
           id: powerpoints[focused_index]._id,
           name,
-          imageHref,
+          icon,
           href
         })
           .then(res => {
@@ -198,7 +162,7 @@ class Admin_Ppt_EditableTable extends Component {
             const href = res.data.path;
             Axios.post(`${RootUrl}/powerpoint`, {
               category_id,
-              imageHref,
+              icon,
               name,
               href
             })
@@ -336,18 +300,22 @@ class Admin_Ppt_EditableTable extends Component {
                 success="right"
                 value={this.state.name}
               />
-              <Dragzone
-                handleFiles={this.handleImages}
-                file={this.state.imageFile}
-                href={this.state.imageHref}
+              <MDBInput
+                name="icon"
+                onChange={this.handleChange}
+                label="הזן שם צלמית"
+                group
+                type="text"
+                validate
+                error="wrong"
+                success="right"
+                value={this.state.icon}
               />
-
               <Dragzone
                 handleFiles={this.handleFiles}
-                file={this.state.file}f
+                file={this.state.file}
                 href={this.state.href}
               />
-              
               <div className="mb-3 pr-5 pl-5">
                 <MDBBtn type="button" onClick={this.handleToggle("editModal")}>
                   <MDBIcon icon="times" size="lg" />
@@ -364,4 +332,4 @@ class Admin_Ppt_EditableTable extends Component {
     );
   }
 }
-export default Admin_Ppt_EditableTable;
+export default Admin_Doc_EditableTable;

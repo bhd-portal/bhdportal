@@ -69,7 +69,7 @@ class DocumentsPage extends Component {
     return (
       <React.Fragment>
         <HeaderImage
-          imageLink="https://mdbootstrap.com/img/Photos/Slides/img%20(136).jpg"
+          imageLink={require('../../assets/documents-header.png')}
           title="טפסים נפוצים"
         />
 

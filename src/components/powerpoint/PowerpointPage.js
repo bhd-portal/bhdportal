@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { MDBRow, MDBCol, MDBCard } from "mdbreact";
-import PowerpointBullet from "./Powerpoint";
+import PowerpointBullet from "./Powerpoint.js";
 import NavComponent from "../NavComponent";
 import HeaderImage from "../HeaderImage.js";
 import { PowerpointRef } from "../constants";
@@ -27,7 +27,7 @@ class Powerpoint extends Component {
   render() {
     return (
       <Powerpoints
-      powerpoints={this.state.powerpoints}
+        powerpoints={this.state.powerpoints}
       />
     );
   }
@@ -39,7 +39,7 @@ const Powerpoints = ({ powerpoints }) => {
       <React.Fragment>
         <MDBCol
           className="mt-4"
-          style={{ padding: "25px"}}
+          style={{ maxWidth: "15rem", minWidth: "15rem", padding: "20px" }}
         >
           <PowerpointBullet {...powerpoint} />
         </MDBCol>{" "}
@@ -53,7 +53,7 @@ const Powerpoints = ({ powerpoints }) => {
   );
 };
 
-class PowerpointsPage extends Component {
+class PowerpointPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,9 +69,10 @@ class PowerpointsPage extends Component {
     return (
       <React.Fragment>
         <HeaderImage
-          imageLink="https://mdbootstrap.com/img/Photos/Slides/img%20(136).jpg"
-          title="מצגות"
+          imageLink={require('../../assets/powerpoint-header.png')}
+          title="תבניות למצגות"
         />
+
         <NavComponent
           page_ref={PowerpointRef}
           render={category_id => <Powerpoint category_id={category_id} />}
@@ -80,4 +81,4 @@ class PowerpointsPage extends Component {
     );
   }
 }
-export default PowerpointsPage;
+export default PowerpointPage;

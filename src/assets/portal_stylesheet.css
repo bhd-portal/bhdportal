@@ -45,8 +45,27 @@ body {
   padding: 12px 20px !important;
 }
 
-.footer-copyright {
+footer.page-footer .footer-copyright {
+  background: unset !important; 
+}
+
+.footer-copyright:not(.footer-center) {
   direction: ltr !important;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.center-items-v {
+  align-items: center;
+}
+
+.justify-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
 }
 
 .modal-content {
@@ -78,6 +97,7 @@ margin-right: -30px; */
 .products-col {
   padding-right: 20px !important;
   padding-left: 20px !important;
+  margin-bottom: 20px !important;
 }
 
 .products-row {

@@ -44,6 +44,7 @@ class HomePage extends Component {
   getUpdates = () => {
     Axios.get(`${RootUrl}/news`)
       .then(response => {
+        console.log(response.data);
         this.setState({ updates: response.data, isLoading: false });
       })
       .catch(() => {
@@ -151,7 +152,7 @@ class HomePage extends Component {
           className="text-right headline-text-color"
           style={{ marginRight: "2%", marginTop: "3%" }}
         >
-          :עדכוני מערך ההדרכה
+          :חדשות המערך
         </h2>{" "}
         <MDBRow center style={{ margin: "1%", direction: "rtl" }}>
           <UpdateBox updates={updates} />
