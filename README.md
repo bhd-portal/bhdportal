@@ -17,7 +17,7 @@ Download \ Clone
 - Install all dependencies using:
 npm install 
 
-- Edit constants.js file: RootUrl = Your Backend URL (ex. "http://localhost:5003")
+- Edit Config.js file: RootUrl = Your Backend URL (ex. "http://localhost:5003")
 
 # Running The Project
 
