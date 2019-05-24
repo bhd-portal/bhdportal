@@ -13,7 +13,7 @@ export default class Document extends Component {
     return (
       <React.Fragment>
         <a href={href} download={name} className="documents-a-color">
-          <MDBCard testimonial>
+          <MDBCard testimonial className="card-light-hover">
             <MDBCardUp className="card-up2" />
 
             <MDBAvatar className="docum-avatar mx-auto default-color view-overlay text-center z-depth-1">
