@@ -10,11 +10,13 @@ import {
   MDBNavLink,
   MDBModal,
   MDBModalBody,
+  MDBModalFooter,
   MDBInput,
   MDBBtn
 } from "mdbreact";
 import logo from "./logo.png";
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import Button from "react-bootstrap"; 
 import Routes from "./Routes";
 import "./assets/portal_stylesheet.css";
 
@@ -247,9 +249,33 @@ class Portal extends Component {
               {new Date().getFullYear()} Copyright
             </p>
 
-            <p className="footer-copyright mb-0 py-3">
-               Crafted With &hearts; Aviv Day, Nadav, Orel &amp; Coral
-            </p>
+			<button type="button" class="btn btn-link btn-lg" data-target="#about" onClick={this.toggle(3)} to="#">
+              אודות
+			</button>
+
+
+			<MDBModal
+              className="form-elegant "
+              isOpen={this.state.modal3 && !localStorage.getItem("token")}
+              toggle={this.toggle(3)}
+            >
+              <MDBModalBody className="mx-3 ">
+                <hr className="my-3" />
+                <section className="form-elegant">
+                  <div className="text-center">
+                    <h1 className="dark-grey-text mb-5">
+                      <strong>אודות</strong>
+                    </h1>
+                  </div>
+                  <div className="text-center">
+                    <h6 className="dark-grey-text mb-5">
+        		      Crafted With &hearts; Aviv Day, Nadav, Orel, Coral &amp; Kamanim 175
+        		    </h6>
+	      		  </div>
+                </section>
+              </MDBModalBody>
+            </MDBModal>
+
             <img className="footer-copyright" src={require('./images/artech.png')} width="70px" />
 
             <MDBModal
