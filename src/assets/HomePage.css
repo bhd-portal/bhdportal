@@ -28,3 +28,16 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
   top: 40%;
   z-index: 1;
 }
+.blue-hex {
+    position: absolute;
+    bottom: 10px;
+    right: 10px
+}
+
+.right-hex {
+  /*width: 10px;*/
+    /*height: 10px;*/
+    /*margin-top: 10px;*/
+    /*margin-right: 10px;*/
+    /*position: relative;*/
+}
