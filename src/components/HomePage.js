@@ -158,6 +158,9 @@ class HomePage extends Component {
                     <div className="blue-hex">
                             <img src={this.state.blueHex} height={100} width={100} />
                         </div>
+                    <div className="home-page-characters">
+                        <img src={this.state.characters} width={400} height={400}/>
+                    </div>
                 </div>
                 <BranchList branches={branches}/>
                 <h2
