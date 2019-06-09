@@ -12,7 +12,7 @@ class Admin_Documents extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1 className="h1-title mb-4 text-center">ניהול תוצרי הדרכה</h1>
+        <h1 className="h1-title mb-4 text-center">ניהול מסמכי א"ב בהדרכה</h1>
         <EditableNav
           page_ref={ABGuidanceRef}
           render={category_id => (

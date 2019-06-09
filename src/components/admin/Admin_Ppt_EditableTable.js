@@ -23,7 +23,7 @@ class Admin_Doc_EditableTable extends Component {
       focused_index: undefined,
       name: "",
       icon: "",
-      href: "",
+      file_if: "",
       powerpoints: []
     };
 
@@ -34,6 +34,7 @@ class Admin_Doc_EditableTable extends Component {
     this.setState({ file: files[0] });
   };
 
+  /*
   uploadFiles = () => {
     console.log("UPLOAD FILES STARTED");
     if (!this.state.file) {
@@ -50,7 +51,7 @@ class Admin_Doc_EditableTable extends Component {
       .catch(error => {
         this.setState({ error });
       });
-  };
+  }; */
 
   getPowerpoints = () => {
     Axios.get(`${RootUrl}/powerpoint`, {
@@ -70,7 +71,7 @@ class Admin_Doc_EditableTable extends Component {
       if (focused_index !== undefined) {
         this.setState(this.state.powerpoints[focused_index]);
       } else {
-        this.setState({ name: "", icon: "", href: "" });
+        this.setState({ name: "", icon: "", file_id: "" });
       }
     }
   };
@@ -78,6 +79,8 @@ class Admin_Doc_EditableTable extends Component {
   handleDelete = e => {
     // delete
     const id = this.state.powerpoints[this.state.focused_index]._id;
+    const file_id = this.state.powerpoints[this.state.focused_index].file_id;
+
     Axios.delete(`${RootUrl}/powerpoint`, {
       params: {
         id
@@ -88,7 +91,17 @@ class Admin_Doc_EditableTable extends Component {
           powerpoints: this.state.powerpoints.filter(elem => elem._id !== id),
           isLoading: false
         });
-        toast.info("מסמך נמחק בהצלחה!");
+        Axios.delete(`${RootUrl}/file`, {
+          params: {
+            'id': file_id
+          }
+        }).then( res => {
+          if (res.status != 200){
+            toast.error("נכשל במחיקת הקובץ!");
+          } else {
+            toast.info("מסמך נמחק בהצלחה!");
+          }
+        })
       })
       .catch(err => {
         this.setState({ error: err, isLoading: false });
@@ -103,24 +116,36 @@ class Admin_Doc_EditableTable extends Component {
     const { focused_index, powerpoints, name, file, icon } = this.state;
     if (focused_index !== undefined) {
       if (file) {
+        //save the file_id of the previous file
+        const old_file_id = powerpoints[focused_index].file_id;
         const data = new FormData();
         data.append("file", this.state.file);
         data.append("filename", this.state.file.name);
         data.append("category", "powerpoints");
         Axios.post(`${RootUrl}/file`, data).then(res => {
-          const href = res.data.path;
+          const file_id = res.data.id;
           Axios.patch(`${RootUrl}/powerpoint`, {
             category_id,
             id: powerpoints[focused_index]._id,
             name,
             icon,
-            href
+            file_id
           })
             .then(res => {
               powerpoints[focused_index] = res.data.powerpoint;
 
               this.setState({ powerpoints, isLoading: false });
               toast.info("מסמך עודכן בהצלחה!");
+              //after success, delete the previous file
+              Axios.delete(`${RootUrl}/file`, {
+                params: {
+                  'id': old_file_id
+                }
+              }).then( res => {
+                if (res.status != 200){
+                  toast.error("נכשל במחיקת המסמך הקודם!");
+                }
+              })
             })
             .catch(err => {
               this.setState({ error: err, isLoading: false });
@@ -128,13 +153,13 @@ class Admin_Doc_EditableTable extends Component {
             });
         });
       } else {
-        let { href } = this.state;
+        let { file_id } = this.state;
         Axios.patch(`${RootUrl}/powerpoint`, {
           category_id,
           id: powerpoints[focused_index]._id,
           name,
           icon,
-          href
+          file_id
         })
           .then(res => {
             powerpoints[focused_index] = res.data.powerpoint;
@@ -159,12 +184,12 @@ class Admin_Doc_EditableTable extends Component {
         data.append("category", "powerpoints");
         Axios.post(`${RootUrl}/file`, data)
           .then(res => {
-            const href = res.data.path;
+            const file_id = res.data.id;
             Axios.post(`${RootUrl}/powerpoint`, {
               category_id,
               icon,
               name,
-              href
+              file_id
             })
               .then(res => {
                 powerpoints.push(res.data.powerpoint);
@@ -314,7 +339,7 @@ class Admin_Doc_EditableTable extends Component {
               <Dragzone
                 handleFiles={this.handleFiles}
                 file={this.state.file}
-                href={this.state.href}
+                file_id={this.state.file_id}
               />
               <div className="mb-3 pr-5 pl-5">
                 <MDBBtn type="button" onClick={this.handleToggle("editModal")}>

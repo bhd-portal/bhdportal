@@ -76,7 +76,6 @@ class Portal extends Component {
   }
 
   loginAccount() {
-    console.log(this.inputInformation);
     Axios.post(`${RootUrl}/admins/login`, {
       name: this.state.name,
       password: this.state.password
@@ -255,7 +254,7 @@ class Portal extends Component {
 
 			<MDBModal
               className="form-elegant "
-              isOpen={this.state.modal3 && !localStorage.getItem("token")}
+              isOpen={this.state.modal3}
               toggle={this.toggle(3)}
             >
               <MDBModalBody className="mx-3 ">
