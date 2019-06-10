@@ -38,6 +38,7 @@ class Admin_ABGuidance_EditableTable extends Component {
     this.setState({ file: files[0] });
   };
 
+  /*
   uploadFiles = () => {
     if (!this.state.file) {
       return alert("No file");
@@ -53,7 +54,7 @@ class Admin_ABGuidance_EditableTable extends Component {
       .catch(error => {
         this.setState({ error });
       });
-  };
+  }; */
 
   GetABDocuments = () => {
     Axios.get(`${RootUrl}/abguidancedocument`, {
@@ -73,7 +74,7 @@ class Admin_ABGuidance_EditableTable extends Component {
       if (focused_index !== undefined) {
         this.setState(this.state.documents[focused_index]);
       } else {
-        this.setState({ name: "", href: "", description: "" });
+        this.setState({ name: "", file_id: "", description: "" });
       }
     }
   };
@@ -81,6 +82,8 @@ class Admin_ABGuidance_EditableTable extends Component {
   handleDelete = e => {
     const { focused_index, documents } = this.state;
     const id = this.state.documents[focused_index]._id;
+    const file_id = this.state.documents[this.state.focused_index].file_id;
+
     Axios.delete(`${RootUrl}/abguidancedocument`, {
       params: {
         id
@@ -91,7 +94,17 @@ class Admin_ABGuidance_EditableTable extends Component {
           documents: documents.filter(elem => elem._id !== id),
           isLoading: false
         });
-        toast.info("מסמך נמחק בהצלחה!");
+        Axios.delete(`${RootUrl}/file`, {
+          params: {
+            'id': file_id
+          }
+        }).then( res => {
+          if (res.status != 200){
+            toast.error("נכשל במחיקת הקובץ!");
+          } else {
+            toast.info("מסמך נמחק בהצלחה!");
+          }
+        })
       })
       .catch(err => {
         this.setState({ error: err, isLoading: false });
@@ -105,23 +118,35 @@ class Admin_ABGuidance_EditableTable extends Component {
     const { focused_index, documents, name, file } = this.state;
     if (focused_index !== undefined) {
       if (file) {
+        //save the file_id of the previous file
+        const old_file_id = documents[focused_index].file_id;
         const data = new FormData();
         data.append("file", this.state.file);
         data.append("filename", this.state.file.name);
         data.append("category", "abdocuments");
         Axios.post(`${RootUrl}/file`, data).then(res => {
-          const href = res.data.path;
+          const file_id = res.data.id;
           Axios.patch(`${RootUrl}/abguidancedocument`, {
             subcategory_id,
             id: documents[focused_index]._id,
             name,
-            href
+            file_id
           })
             .then(res => {
               documents[focused_index] = res.data.document;
 
               this.setState({ documents, isLoading: false });
               toast.info("מסמך עודכן בהצלחה!");
+              //after success, delete the previous file
+              Axios.delete(`${RootUrl}/file`, {
+                params: {
+                  'id': old_file_id
+                }
+              }).then( res => {
+                if (res.status != 200){
+                  toast.error("נכשל במחיקת המסמך הקודם!");
+                }
+              })
             })
             .catch(err => {
               this.setState({ error: err, isLoading: false });
@@ -129,12 +154,12 @@ class Admin_ABGuidance_EditableTable extends Component {
             });
         });
       } else {
-        let { href } = this.state;
+        let { file_id } = this.state;
         Axios.patch(`${RootUrl}/abguidancedocument`, {
           subcategory_id,
           id: documents[focused_index]._id,
           name,
-          href
+          file_id
         })
           .then(res => {
             documents[focused_index] = res.data.document;
@@ -158,11 +183,11 @@ class Admin_ABGuidance_EditableTable extends Component {
         data.append("category", "abdocuments");
         Axios.post(`${RootUrl}/file`, data)
           .then(res => {
-            const href = res.data.path;
+            const file_id = res.data.id;
             Axios.post(`${RootUrl}/abguidancedocument`, {
               subcategory_id,
               name,
-              href
+              file_id
             })
               .then(res => {
                 documents.push(res.data.document);
@@ -301,7 +326,7 @@ class Admin_ABGuidance_EditableTable extends Component {
               <Dragzone
                 handleFiles={this.handleFiles}
                 file={this.state.file}
-                href={this.state.href}
+                file_id={this.state.file_id}
               />
 
               <div className="mb-3 pr-5 pl-5">

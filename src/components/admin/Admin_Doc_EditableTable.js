@@ -23,7 +23,7 @@ class Admin_Doc_EditableTable extends Component {
       focused_index: undefined,
       name: "",
       icon: "",
-      href: "",
+      file_id: "",
       documents: []
     };
 
@@ -34,6 +34,7 @@ class Admin_Doc_EditableTable extends Component {
     this.setState({ file: files[0] });
   };
 
+/*
   uploadFiles = () => {
     console.log("UPLOAD FILES STARTED");
     if (!this.state.file) {
@@ -51,6 +52,7 @@ class Admin_Doc_EditableTable extends Component {
         this.setState({ error });
       });
   };
+  */
 
   getDocuments = () => {
     Axios.get(`${RootUrl}/document`, {
@@ -70,7 +72,7 @@ class Admin_Doc_EditableTable extends Component {
       if (focused_index !== undefined) {
         this.setState(this.state.documents[focused_index]);
       } else {
-        this.setState({ name: "", icon: "", href: "" });
+        this.setState({ name: "", icon: "", file_id: "" });
       }
     }
   };
@@ -78,6 +80,8 @@ class Admin_Doc_EditableTable extends Component {
   handleDelete = e => {
     // delete
     const id = this.state.documents[this.state.focused_index]._id;
+    const file_id = this.state.documents[this.state.focused_index].file_id;
+
     Axios.delete(`${RootUrl}/document`, {
       params: {
         id
@@ -88,7 +92,17 @@ class Admin_Doc_EditableTable extends Component {
           documents: this.state.documents.filter(elem => elem._id !== id),
           isLoading: false
         });
-        toast.info("מסמך נמחק בהצלחה!");
+        Axios.delete(`${RootUrl}/file`, {
+          params: {
+            'id': file_id
+          }
+        }).then( res => {
+          if (res.status != 200){
+            toast.error("נכשל במחיקת הקובץ!");
+          } else {
+            toast.info("מסמך נמחק בהצלחה!");
+          }
+        })
       })
       .catch(err => {
         this.setState({ error: err, isLoading: false });
@@ -103,24 +117,36 @@ class Admin_Doc_EditableTable extends Component {
     const { focused_index, documents, name, file, icon } = this.state;
     if (focused_index !== undefined) {
       if (file) {
+        //save the file_id of the previous file
+        const old_file_id = documents[focused_index].file_id;
         const data = new FormData();
         data.append("file", this.state.file);
         data.append("filename", this.state.file.name);
         data.append("category", "documents");
         Axios.post(`${RootUrl}/file`, data).then(res => {
-          const href = res.data.path;
+          const file_id = res.data.id;
           Axios.patch(`${RootUrl}/document`, {
             category_id,
             id: documents[focused_index]._id,
             name,
             icon,
-            href
+            file_id
           })
             .then(res => {
               documents[focused_index] = res.data.document;
 
               this.setState({ documents, isLoading: false });
               toast.info("מסמך עודכן בהצלחה!");
+              //after success, delete the previous file
+              Axios.delete(`${RootUrl}/file`, {
+                params: {
+                  'id': old_file_id
+                }
+              }).then( res => {
+                if (res.status != 200){
+                  toast.error("נכשל במחיקת המסמך הקודם!");
+                }
+              })
             })
             .catch(err => {
               this.setState({ error: err, isLoading: false });
@@ -128,13 +154,13 @@ class Admin_Doc_EditableTable extends Component {
             });
         });
       } else {
-        let { href } = this.state;
+        let { file_id } = this.state;
         Axios.patch(`${RootUrl}/document`, {
           category_id,
           id: documents[focused_index]._id,
           name,
           icon,
-          href
+          file_id
         })
           .then(res => {
             documents[focused_index] = res.data.document;
@@ -159,12 +185,12 @@ class Admin_Doc_EditableTable extends Component {
         data.append("category", "documents");
         Axios.post(`${RootUrl}/file`, data)
           .then(res => {
-            const href = res.data.path;
+            const file_id = res.data.id;
             Axios.post(`${RootUrl}/document`, {
               category_id,
               icon,
               name,
-              href
+              file_id
             })
               .then(res => {
                 documents.push(res.data.document);
@@ -314,7 +340,7 @@ class Admin_Doc_EditableTable extends Component {
               <Dragzone
                 handleFiles={this.handleFiles}
                 file={this.state.file}
-                href={this.state.href}
+                file_id={this.state.file_id}
               />
               <div className="mb-3 pr-5 pl-5">
                 <MDBBtn type="button" onClick={this.handleToggle("editModal")}>

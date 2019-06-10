@@ -9,7 +9,9 @@ export default class Powerpoint extends Component {
   }
 
   render() {
-    const { name, icon, href } = this.props;
+    const { name, icon, file_id } = this.props;
+    const href = new URL(`${RootUrl}/file`);
+    href.searchParams.append('id', file_id);
     return (
       <React.Fragment>
         <a href={href} download={name} className="documents-a-color">
