@@ -145,22 +145,20 @@ class HomePage extends Component {
                                 </p>
                             </MDBCol>
                         </MDBRow>
-
-
-
-                    </MDBView>
-                    <div className="right-hex">
+                        <div className="right-hex">
                             <img src={this.state.rightHex} height={100} width={100} align="right"/>
                         </div>
-                    <div className="left-hex">
+                        <div className="left-hex">
                             <img src={this.state.leftHex} height={100} width={100} align="left"/>
                         </div>
-                    <div className="blue-hex">
+                        <div className="blue-hex">
                             <img src={this.state.blueHex} height={100} width={100} />
                         </div>
-                    <div className="home-page-characters">
-                        <img src={this.state.characters} width={400} height={400}/>
-                    </div>
+                        <div className="home-page-characters">
+                            <img src={this.state.characters} width={400} height={400}/>
+                        </div>
+                    </MDBView>
+
                 </div>
                 <BranchList branches={branches}/>
                 <h2

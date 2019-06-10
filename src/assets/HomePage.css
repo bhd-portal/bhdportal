@@ -24,19 +24,18 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
 
 #front-page-title-row {
   position: absolute;
-  right: 5%;
+  right: 10%;
   top: 40%;
   z-index: 1;
 }
 .blue-hex {
     position: absolute;
     bottom: 10px;
-    right: 10px
+    right: 5px;
 }
 
 .home-page-characters {
     display: block;
-    margin-right: auto;
-    margin-left: auto;
+    margin-top: 70px;
 }
 

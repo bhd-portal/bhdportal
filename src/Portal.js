@@ -255,7 +255,7 @@ class Portal extends Component {
 
 			<MDBModal
               className="form-elegant "
-              isOpen={this.state.modal3 && !localStorage.getItem("token")}
+              isOpen={this.state.modal3}
               toggle={this.toggle(3)}
             >
               <MDBModalBody className="mx-3 ">
