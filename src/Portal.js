@@ -201,7 +201,7 @@ class Portal extends Component {
                 <MDBNavItem>
                   <a
                     onClick={this.closeCollapse("mainNavbarCollapse")}
-                    href="http://www.mooc-two.d8200.mil"
+                    href="http://www.google.com"
                     target="_blank"
                     class="nav-link Ripple-parent"
                   >
