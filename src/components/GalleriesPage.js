@@ -219,11 +219,22 @@ class GalleriesPage extends Component {
         />
         <NavComponent
           page_id="5ca4bd85d4ff14140cc2c92f"
-          // categories={this.state.categories}
-          render={item => <Albums albums={item.albums} />}
+          categories={this.state.categories}
+          // render works with _id as a parameter,
+            // so we need to the function to get the albums from this `_id` in categories
+          render={_id => <Albums albums={this._get_albums(_id)} />}
         />
       </React.Fragment>
     );
   }
+
+   _get_albums(_id) {
+      for(var index in this.state.categories) {
+          if(this.state.categories[index]._id === _id) {
+              return this.state.categories[index].albums
+          }
+      }
+    }
+
 }
 export default GalleriesPage;

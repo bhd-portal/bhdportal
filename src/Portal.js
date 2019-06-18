@@ -151,7 +151,7 @@ class Portal extends Component {
             >
               <MDBNavbarNav right style={{ fontSize: "18px" }}>
                 {this.renderManagement()}
-                {/* <MDBNavItem>
+                { <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
                     to="/gallery"
@@ -159,7 +159,7 @@ class Portal extends Component {
                     גלריית התמונות
                     <i className="fas fa-images ml-2" />
                   </MDBNavLink>
-                </MDBNavItem> */}
+                </MDBNavItem> }
                                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
