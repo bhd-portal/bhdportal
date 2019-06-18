@@ -220,6 +220,7 @@ class GalleriesPage extends Component {
         <NavComponent
           page_id="5ca4bd85d4ff14140cc2c92f"
           categories={this.state.categories}
+          shouldGetCategoriesFromProps={true}
           // render works with _id as a parameter,
             // so we need to the function to get the albums from this `_id` in categories
           render={_id => <Albums albums={this._get_albums(_id)} />}
