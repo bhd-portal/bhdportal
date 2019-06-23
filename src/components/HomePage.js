@@ -176,6 +176,7 @@ class HomePage extends Component {
                 <BranchList branches={branches}/>
                 <div>
                     {words.map(word => JSON.stringify(word))}
+                    {/* create a new component for commander word with title style and content */}
                 </div>
                 <h2
                     className="text-right headline-text-color"
