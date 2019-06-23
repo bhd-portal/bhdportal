@@ -38,6 +38,7 @@ class HomePage extends Component {
             ideals: [],
             branches: [],
             updates: [],
+            words: [],
             isLoading: true
         };
 
@@ -134,7 +135,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const {updates, products, branches, isLoading, error} = this.state;
+        const {updates, words, branches, isLoading, error} = this.state;
 
         if (isLoading) {
             return <div>טוען</div>;
@@ -173,6 +174,9 @@ class HomePage extends Component {
 
                 </div>
                 <BranchList branches={branches}/>
+                <div>
+                    {words.map(word => JSON.stringify(word))}
+                </div>
                 <h2
                     className="text-right headline-text-color"
                     style={{marginRight: "2%", marginTop: "3%"}}
@@ -182,42 +186,6 @@ class HomePage extends Component {
                 <MDBRow center style={{margin: "1%", direction: "rtl"}}>
                     <UpdateBox updates={updates}/>
                 </MDBRow>
-                {/* <MDBCard
-          style={{
-            marginTop: "3%",
-            marginRight: "2%",
-            marginLeft: "2%",
-            marginBottom: "2%"
-          }}
-        >
-          <h2
-            className="text-right"
-            style={{ marginRight: "2%", marginTop: "1%", marginBottom: "2%" }}
-          >
-            :תוצרי הדרכה נבחרים
-          </h2>{" "}
-          <MDBRow
-            center
-            style={{
-              marginTop: "0",
-              marginBottom: "0%",
-              marginRight: "1%",
-              marginLeft: "1%"
-            }}
-          >
-            <ProcductsList products={products} type="home-page-products-col" />
-          </MDBRow>{" "}
-          <Link to="/products">
-            <MDBBtn
-              outline
-              color="primary"
-              className="ml-4 mt-2 mb-4"
-              style={{ width: "12%" }}
-            >
-              :לצפייה בתוצרים נוספים
-            </MDBBtn>
-          </Link>
-        </MDBCard>*/}{" "}
                 <MDBCard
                     className="px-3 "
                     style={{
