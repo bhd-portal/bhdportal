@@ -99,7 +99,7 @@ class Admin_ABGuidance_EditableTable extends Component {
             'id': file_id
           }
         }).then( res => {
-          if (res.status != 200){
+          if (res.status !== 200){
             toast.error("נכשל במחיקת הקובץ!");
           } else {
             toast.info("מסמך נמחק בהצלחה!");
@@ -143,7 +143,7 @@ class Admin_ABGuidance_EditableTable extends Component {
                   'id': old_file_id
                 }
               }).then( res => {
-                if (res.status != 200){
+                if (res.status !== 200){
                   toast.error("נכשל במחיקת המסמך הקודם!");
                 }
               })

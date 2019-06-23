@@ -44,6 +44,7 @@ class HomePage extends Component {
         this.getUpdates();
         this.getBranches();
         this.getIdeals();
+        this.getCommanderWords();
     }
 
     getUpdates = () => {
@@ -66,6 +67,17 @@ class HomePage extends Component {
                 this.setState({error, isLoading: false});
             });
     };
+
+    getCommanderWords = () => {
+        Axios.get(`${RootUrl}/commanderwords`)
+            .then(res => {
+                console.log(res.data);
+                this.setState({words: res.data, isLoading: false});
+            })
+            .catch(({error}) => {
+                this.setState({error, isLoading: false});
+            });
+    }
 
     componentDidMount() {
         window.scrollTo(0, 0);
