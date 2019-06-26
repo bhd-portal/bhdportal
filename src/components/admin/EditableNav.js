@@ -45,7 +45,8 @@ class EditableNav extends Component {
         this.setState({ categories: res.data.categories, isLoading: false })
       )
       .catch(err => {
-        this.setState({ error: err, isLoading: false });
+        console.log(err)
+        // this.setState({ error: err, isLoading: false });
       });
   };
 

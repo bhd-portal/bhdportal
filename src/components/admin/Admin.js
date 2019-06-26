@@ -25,11 +25,7 @@ class Admin extends Component {
           <Switch>
             <Route exact path="/admin/homepage" component={Admin_Homepage} />
             <Route exact path="/admin/products" component={Admin_Products} />
-            <Route
-              exact
-              path="/admin/ab_guidance"
-              component={Admin_ABGuidance}
-            />
+            <Route exact path="/admin/ab_guidance" component={Admin_ABGuidance} />
             <Route exact path="/admin/powerpoint" component={Admin_Powerpoint} />
             <Route exact path="/admin/documents" component={Admin_Documents} />
             <Route exact path="/admin/gallery" component={Admin_Gallery} />

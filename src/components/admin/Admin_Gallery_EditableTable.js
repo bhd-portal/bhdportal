@@ -19,8 +19,10 @@ import {
 import Toaster from "../Toaster";
 import "./Admin_ABGuidance_EditableTable.css";
 import "./Editable_Gallery.css";
+import Axios from "axios";
+import {RootUrl} from "../constants";
 
-class Editable_Gallery extends Component {
+class Admin_Gallery_EditableTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +32,8 @@ class Editable_Gallery extends Component {
       focused_index: undefined,
       delete_index: undefined,
       deleteModal: false,
-      images: [
+      albums_dict: {}
+     /* images: [
         "https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(63).jpg",
         "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(66).jpg",
         "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(65).jpg",
@@ -40,9 +43,52 @@ class Editable_Gallery extends Component {
         "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(69).jpg",
         "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(59).jpg",
         "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-      ]
+      ] */
     };
+
+    this.getAlbumsDict();
   }
+
+  getAlbumsDict = () => {
+    Axios.get(`${RootUrl}/album`, {
+      params: { category_id: this.props.category_id }
+    })
+        .then(res => {
+          const albums = res.data.albums;
+
+          this.setState({ albums_dict: this.getAlbumsImages(albums), isLoading: false})
+        }
+  )
+        .catch(({ error }) => {
+          this.setState({ error, isLoading: false });
+        });
+  };
+
+  getAlbumsImages = ( albums ) => {
+    let album;
+    let picture_id;
+
+    const albums_dict = {}
+
+    for (album in albums){
+      let album_pictures = []
+
+      for (picture_id in album.images){
+        Axios.get(`${RootUrl}/picture`, {
+          params: { id: picture_id }
+        }).then(res =>
+            // If an error pops here it will be thrown in getAlbums()
+                album_pictures.push(res.data.picture)
+        ).catch(({ error }) => {
+          console.log(error)
+        });
+      }
+
+      albums_dict[album.name] = album_pictures
+    }
+
+    return albums_dict
+  };
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -155,8 +201,7 @@ class Editable_Gallery extends Component {
   };
 
   renderAlbums() {
-    const { albums } = this.props;
-    return albums.map(({ name }, index) => {
+    return this.state.albums_dict.map(({ name }, index) => {
       return (
         <MDBCard className="mt-3">
           <MDBCollapseHeader className="text-right editable">
@@ -272,4 +317,4 @@ class Editable_Gallery extends Component {
   }
 }
 
-export default Editable_Gallery;
+export default Admin_Gallery_EditableTable;
