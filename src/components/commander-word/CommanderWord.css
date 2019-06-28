@@ -1,6 +1,7 @@
 
 .words-wrapper {
     display: flex;
+    flex-direction: column;
     align-content: flex-end;
     direction: rtl;
     text-align: right;

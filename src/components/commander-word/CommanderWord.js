@@ -1,5 +1,6 @@
 
 import React from 'react';
+import "./CommanderWord.css";
 
 const CommanderWords = props => {
     return (
