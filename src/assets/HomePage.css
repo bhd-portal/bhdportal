@@ -39,3 +39,8 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
     margin-top: 70px;
 }
 
+.commander-words {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}

@@ -16,9 +16,8 @@ import leftHexagonals from "../images/background/leftHexagonals.png";
 import rightHexagonals from "../images/background/rightExagonals.png";
 import UpdateBox from "./UpdateBox";
 import "../assets/Lightbox.css";
-import ProcductsList from "./ProcductsList";
 import BranchList from "./BranchList";
-import {Link} from "react-router-dom";
+import CommanderWord from './commander-word/CommanderWord';
 import Axios from "axios";
 import {RootUrl} from "./constants";
 
@@ -174,9 +173,8 @@ class HomePage extends Component {
 
                 </div>
                 <BranchList branches={branches}/>
-                <div>
-                    {words.map(word => JSON.stringify(word))}
-                    {/* create a new component for commander word with title style and content */}
+                <div className="commander-words">
+                    {words.map(word => <CommanderWord />)}
                 </div>
                 <h2
                     className="text-right headline-text-color"
