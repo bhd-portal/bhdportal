@@ -77,39 +77,42 @@ class Admin_Doc_EditableTable extends Component {
   };
 
   handleDelete = e => {
-    // delete
-    const id = this.state.powerpoints[this.state.focused_index]._id;
-    const file_id = this.state.powerpoints[this.state.focused_index].file_id;
+    if (this.state.focused_index !== undefined) {
+      // delete
+      const id = this.state.powerpoints[this.state.focused_index]._id;
+      const file_id = this.state.powerpoints[this.state.focused_index].file_id;
 
-    Axios.delete(`${RootUrl}/powerpoint`, {
-      params: {
-        id
-      }
-    })
-      .then(res => {
-        this.setState({
-          powerpoints: this.state.powerpoints.filter(elem => elem._id !== id),
-          isLoading: false
-        });
-        Axios.delete(`${RootUrl}/file`, {
-          params: {
-            'id': file_id
-          }
-        }).then( res => {
-          if (res.status != 200){
-            toast.error("נכשל במחיקת הקובץ!");
-          } else {
-            toast.info("מסמך נמחק בהצלחה!");
-          }
-        })
+      Axios.delete(`${RootUrl}/powerpoint`, {
+        params: {
+          id
+        }
       })
-      .catch(err => {
-        this.setState({ error: err, isLoading: false });
-        toast.error("מחיקת מסמך נכשלה!");
-      });
+        .then(res => {
+          this.setState({
+            powerpoints: this.state.powerpoints.filter(elem => elem._id !== id),
+            isLoading: false
+          });
+          Axios.delete(`${RootUrl}/file`, {
+            params: {
+              'id': file_id
+            }
+          }).then( res => {
+            if (res.status != 200){
+              toast.error("נכשל במחיקת הקובץ!");
+            } else {
+              toast.info("מסמך נמחק בהצלחה!");
+            }
+          })
+        })
+        .catch(err => {
+          this.setState({ error: err, isLoading: false });
+          toast.error("מחיקת מסמך נכשלה!");
+        });
 
-    this.handleToggle("deleteModal")(e);
-  };
+      this.handleToggle("deleteModal")(e);
+      }
+    };
+
 
   handleEdit = e => {
     const { category_id } = this.props;
@@ -173,6 +176,7 @@ class Admin_Doc_EditableTable extends Component {
           });
       }
     } else {
+      console.log(file);
       if (!file) {
         this.handleToggle("editModal")(e);
         toast.error(" הוספת מסמך נכשלה!");
