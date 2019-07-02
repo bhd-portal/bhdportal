@@ -28,10 +28,27 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
   top: 40%;
   z-index: 1;
 }
-.blue-hex {
+
+.blue-hex img {
     position: absolute;
-    bottom: 10px;
+    bottom: 0;
     right: 5px;
+    height: 250px;
+    width: 250px;
+}
+
+.right-hex img {
+  width: 360px;
+  height: 300px;
+  top: -60px;
+  right: -15px;
+}
+
+.left-hex img {
+  width: 180px;
+  height: 150px;
+  top: 490px;
+  left: 40px;
 }
 
 .home-page-characters {
@@ -39,3 +56,7 @@ a.border.nav-link.border-light.rounded.mr-1:hover {
     margin-top: 70px;
 }
 
+.home-page-characters img {
+  width: 450px;
+  height: 450px;
+}

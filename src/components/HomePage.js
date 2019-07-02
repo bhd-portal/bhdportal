@@ -10,10 +10,14 @@ import {
 } from "mdbreact";
 import "../assets/HomePage.css";
 import "../pages/pro/sections/VideoBackgroundPage.css";
-import characters from "../images/background/homePageCharcaters.png";
-import blueHexagonal from "../images/background/blueHexagonal.png";
-import leftHexagonals from "../images/background/leftHexagonals.png";
-import rightHexagonals from "../images/background/rightExagonals.png";
+import characters from '../images/background/homeHexCharacters.png';
+// import characters from "../images/background/homePageCharcaters.png";
+// import blueHexagonal from "../images/background/blueHexagonal.png";
+// import leftHexagonals from "../images/background/leftHexagonals.png";
+// import rightHexagonals from "../images/background/rightExagonals.png";
+import blueHexagonal from '../images/background/bluehex.png';
+import leftHexagonals from '../images/background/lefthex.png';
+import rightHexagonals from '../images/background/righthex.png';
 import UpdateBox from "./UpdateBox";
 import "../assets/Lightbox.css";
 import BranchList from "./BranchList";
@@ -142,16 +146,16 @@ class HomePage extends Component {
                             </MDBCol>
                         </MDBRow>
                         <div className="right-hex">
-                            <img src={this.state.rightHex} height={100} width={100} align="right" />
+                            <img src={this.state.rightHex} align="right" />
                         </div>
                         <div className="left-hex">
-                            <img src={this.state.leftHex} height={100} width={100} align="left" />
+                            <img src={this.state.leftHex} align="left" />
                         </div>
                         <div className="blue-hex">
-                            <img src={this.state.blueHex} height={100} width={100} />
+                            <img src={this.state.blueHex} />
                         </div>
                         <div className="home-page-characters">
-                            <img src={this.state.characters} width={400} height={400} />
+                            <img src={this.state.characters} />
                         </div>
                     </MDBView>
 

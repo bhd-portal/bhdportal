@@ -42,6 +42,7 @@ pre {
 
 .spaceship {
     position: relative;
+    /* width: 600px; */
     top: 121px;
     z-index: -1;
     left: -61px;
