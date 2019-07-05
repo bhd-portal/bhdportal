@@ -33,6 +33,7 @@ class Admin_Gallery_EditableTable extends Component {
             focused_index: undefined,
             deleteModal: false,
             albums: [],
+
             pictures: [
                 "https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(63).jpg",
                 "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(66).jpg",
@@ -50,16 +51,11 @@ class Admin_Gallery_EditableTable extends Component {
     }
 
     getAlbums = () => {
-        console.log("In get albums")
         Axios.get(`${RootUrl}/album`, {
             params: {category_id: this.props.category_id}
         })
             .then(res => {
-                    //const albums = res.data.albums;
-
-                    //this.setState({ albums: this.getAlbumsPictures(albums), isLoading: false})
-                    this.setState({albums: res.data.albums, isLoading: false})
-                    console.log(res.data)
+                    this.getAlbumsPictures(res.data.albums);
                 }
             )
             .catch(({error}) => {
@@ -68,29 +64,20 @@ class Admin_Gallery_EditableTable extends Component {
     };
 
     getAlbumsPictures = (albums) => {
-        let album;
-        let picture_id;
-
-        const albums_dict = {}
-
-        for (album in albums) {
-            let album_pictures = []
-
-            for (picture_id in album.pictures) {
-                Axios.get(`${RootUrl}/picture`, {
-                    params: {id: picture_id}
-                }).then(res =>
-                    // If an error pops here it will be thrown in getAlbums()
-                    album_pictures.push(res.data.picture)
-                ).catch(({error}) => {
-                    console.log(error)
-                });
-            }
-
-            albums_dict[album.name] = album_pictures
+        let new_albums = albums;
+        for (let i = 0; i < new_albums.length; i++) {
+            new_albums[i].pictures = []
+            Axios.get(`${RootUrl}/picture`, {
+                params: {
+                    'album_id': new_albums[i]._id
+                }
+            }).then(res => {
+                new_albums[i].pictures = res.data.pictures
+            }).catch(err => {
+                this.setState({error: err, isLoading: false});
+            });
         }
-
-        return albums_dict
+        this.setState({ albums: new_albums, isLoading: false });
     };
 
     handleChange = e => {
@@ -154,7 +141,8 @@ class Admin_Gallery_EditableTable extends Component {
             })
                 .then(res => {
                     albums[focused_index] = res.data.album;
-
+                    // Initialize album
+                    albums[focused_index].pictures = []
                     this.setState({albums, isLoading: false});
                     toast.info("אלבום עודכן בהצלחה!");
                 })
@@ -220,44 +208,21 @@ class Admin_Gallery_EditableTable extends Component {
         }
     };
 
-    getAlbumPictures = (album_index) => {
-        console.log("In get album pictures with index " + album_index)
-        const {albums} = this.state;
-        let pictures = []
-        /*
-        if (albums[album_index].pictures !== undefined) {
-            return pictures;
-        }*/
-
-        Axios.get(`${RootUrl}/picture`, {
-            params: {
-                'album_id': albums[album_index]._id
-            }
-        }).then(res => {
-            console.log("logging res: " + res)
-            pictures = res.data.pictures
-        }).catch(err => {
-            this.setState({error: err, isLoading: false});
-        });
-        return pictures
-    };
-
     renderPictures = (album_index) => {
-        //let pictures = this.getAlbumPictures(album_index);
-        const pictures = this.getAlbumPictures(album_index)
-
-        return pictures.map((pictureSrc, index) => {
+        const {albums} = this.state;
+        return albums[album_index].pictures.map(({ file_id }, index) => {
+            const href = new URL(`${RootUrl}/file`);
+            href.searchParams.append('id', file_id);
             return (
                 <MDBCol md="4">
                     <figure>
                         <MDBView hover zoom className="picture-view">
                             <img
-                                src={pictureSrc}
+                                src={href}
                                 style={{cursor: "default"}}
                                 alt="Gallery"
                                 className="img-fluid"
                             />
-
                             <div className="gallery-edit-buttons">
                                 <MDBIcon
                                     className="remove-button"
