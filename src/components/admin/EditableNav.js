@@ -180,6 +180,7 @@ class EditableNav extends Component {
     });
     const nav_contents = categories.map(({ _id }, index) => (
       <MDBTabPane tabId={`${parseInt(index) + 1}`} role="tabpanel">
+        {console.log("Rendering! id=" + _id)}
         {" "}
         {render(_id)}
       </MDBTabPane>

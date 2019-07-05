@@ -204,57 +204,49 @@ class Admin_Gallery_EditableTable extends Component {
                     id
                 }
             })
-                .then( res => {
+                .then(res => {
                     this.setState({
                         albums: albums.filter(elem => elem._id !== id),
                         isLoading: false
                     })
-            toast.info("אלבום נמחק בהצלחה!");
-        })
-        .catch(err => {
-                this.setState({error: err, isLoading: false});
-                this.handleToggle("deleteModal")(e);
-                toast.error("מחיקת אלבום נכשלה!");
-            });
+                    toast.info("אלבום נמחק בהצלחה!");
+                })
+                .catch(err => {
+                    this.setState({error: err, isLoading: false});
+                    this.handleToggle("deleteModal")(e);
+                    toast.error("מחיקת אלבום נכשלה!");
+                });
             this.handleToggle("deleteModal")(e);
         }
     };
 
     getAlbumPictures = (album_index) => {
-        //debugger;
-        const { albums } = this.state;
-        let pictures = albums[album_index].pictures
-
+        console.log("In get album pictures with index " + album_index)
+        const {albums} = this.state;
+        let pictures = []
+        /*
         if (albums[album_index].pictures !== undefined) {
             return pictures;
-        }
+        }*/
 
         Axios.get(`${RootUrl}/picture`, {
             params: {
-                'album_id':  albums[album_index]._id
+                'album_id': albums[album_index]._id
             }
-        }).then( (res) => {
-            debugger
+        }).then(res => {
+            console.log("logging res: " + res)
             pictures = res.data.pictures
-            albums[album_index].pictures = pictures
-            this.setState({albums: albums, isLoading: false})
-            console.log(this.state)
-            return pictures
-        }).catch( err =>{
-            debugger;
-            this.setState({ error: err, isLoading: false });
+        }).catch(err => {
+            this.setState({error: err, isLoading: false});
         });
-
-
+        return pictures
     };
 
     renderPictures = (album_index) => {
-        {console.log("rendering pictures for " + album_index)}
-        let pictures = this.getAlbumPictures(album_index);
+        //let pictures = this.getAlbumPictures(album_index);
+        const pictures = this.getAlbumPictures(album_index)
 
-        const { albums } = this.state;
-        //debugger;
-        return albums[album_index].pictures.map((pictureSrc, index) => {
+        return pictures.map((pictureSrc, index) => {
             return (
                 <MDBCol md="4">
                     <figure>
@@ -280,6 +272,7 @@ class Admin_Gallery_EditableTable extends Component {
         });
     };
 
+
     renderAlbums() {
         return this.state.albums.map(({name}, index) => {
             return (
@@ -296,17 +289,16 @@ class Admin_Gallery_EditableTable extends Component {
                     </MDBCollapseHeader>
                     <MDBCollapse id={index} isOpen={this.state.collapseID}>
                         <MDBCardBody className="text-right">
-                            {/* CHANGE TO REAL IMAGES */}
-                            /*<MDBRow>{this.renderPictures(index, this.state.pictures)}</MDBRow>*/
                             <MDBRow>{this.renderPictures(index)}</MDBRow>
                         </MDBCardBody>
                     </MDBCollapse>
                 </MDBCard>
             );
         });
-    }
+    };
 
     render() {
+        const albums = this.renderAlbums()
         return (
             <React.Fragment>
                 <MDBRow center style={{direction: "rtl"}}>
@@ -328,7 +320,7 @@ class Admin_Gallery_EditableTable extends Component {
                         </div>
                         <MDBCard>
                             <MDBContainer className="md-accordion mt-0">
-                                {this.renderAlbums()}
+                                {albums}
                             </MDBContainer>
                         </MDBCard>
                     </MDBCol>
@@ -407,7 +399,7 @@ class Admin_Gallery_EditableTable extends Component {
                 <Toaster/>
             </React.Fragment>
         );
-    }
-}
 
+    }
+};
 export default Admin_Gallery_EditableTable;

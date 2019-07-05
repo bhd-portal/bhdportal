@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import EditableNav from "./EditableNav";
 import Admin_Gallery_EditableTable from "./Admin_Gallery_EditableTable";
 import {GalleryRef} from "../constants";
-import Admin_Ppt_EditableTable from "./Admin_Ppt_EditableTable";
 
 class Admin_Gallery extends Component {
   constructor(props) {

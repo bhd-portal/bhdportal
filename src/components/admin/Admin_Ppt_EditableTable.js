@@ -57,9 +57,9 @@ class Admin_Doc_EditableTable extends Component {
     Axios.get(`${RootUrl}/powerpoint`, {
       params: { category_id: this.props.category_id }
     })
-      .then(res =>
-        this.setState({ powerpoints: res.data.powerpoints, isLoading: false })
-      )
+      .then(res => {
+        this.setState({powerpoints: res.data.powerpoints, isLoading: false})
+      })
       .catch(({ error }) => {
         this.setState({ error, isLoading: false });
       });
