@@ -1,0 +1,57 @@
+
+.words-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    direction: rtl;
+    text-align: right;
+    padding: 15px;
+}
+
+.title {
+    font-family: sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.content {
+    direction: rtl;
+}
+
+pre {
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+.commander-word-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.commander-word-container-reverse {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.image {
+    /* height: 400px; */
+    width: 400px;
+}
+
+.spaceship {
+    position: relative;
+    /* width: 600px; */
+    top: 121px;
+    z-index: -1;
+    left: -61px;
+}
+
+.looking {
+
+}
+
+.running {
+    
+}
