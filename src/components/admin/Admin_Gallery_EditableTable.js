@@ -21,30 +21,25 @@ import "./Admin_ABGuidance_EditableTable.css";
 import "./Editable_Gallery.css";
 import Axios from "axios";
 import {RootUrl} from "../constants";
+import Dragzone from "./Dragzone";
 
 class Admin_Gallery_EditableTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             collapseID: "",
-            name: "",
-            icon: "",
-            editModal: false,
-            focused_index: undefined,
-            deleteModal: false,
-            albums: [],
 
-            pictures: [
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(63).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(66).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(65).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(67).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(68).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(64).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(69).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(59).jpg",
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            ]
+            album_name: "",
+            picture_name: "",
+            file_id: undefined,
+
+            album_focused_index: undefined,
+            picture_focused_index: undefined,
+            editAlbumModal: false,
+            deleteModal: false,
+            editPictureModal: false,
+            deletePictureModal: false,
+            albums: [],
         };
 
         this.getAlbums();
@@ -66,7 +61,6 @@ class Admin_Gallery_EditableTable extends Component {
     getAlbumsPictures = (albums) => {
         let new_albums = albums;
         for (let i = 0; i < new_albums.length; i++) {
-            new_albums[i].pictures = []
             Axios.get(`${RootUrl}/picture`, {
                 params: {
                     'album_id': new_albums[i]._id
@@ -77,7 +71,7 @@ class Admin_Gallery_EditableTable extends Component {
                 this.setState({error: err, isLoading: false});
             });
         }
-        this.setState({ albums: new_albums, isLoading: false });
+        this.setState({albums: new_albums, isLoading: false});
     };
 
     handleChange = e => {
@@ -85,17 +79,290 @@ class Admin_Gallery_EditableTable extends Component {
         this.setState({[name]: value});
     };
 
+    handleFiles = files => {
+        this.setState({file: files[0]});
+    };
+
     handleToggle = (
         modal,
-        focused_index = undefined,
+        album_focused_index = undefined,
+        picture_focused_index = undefined,
     ) => e => {
-        this.setState({[modal]: !this.state[modal], focused_index});
-        if (modal === "editModal") {
-            if (focused_index !== undefined) {
-                this.setState(this.state.albums[focused_index]);
+        this.setState({[modal]: !this.state[modal], album_focused_index, picture_focused_index});
+        if (modal === "editAlbumModal") {
+            if (album_focused_index !== undefined) {
+                this.setState({album_name: this.state.albums[album_focused_index].name});
             } else {
-                this.setState({name: "", icon: ""});
+                this.setState({album_name: ""});
             }
+        }
+        if (modal === "editPPictureModal") {
+            if (album_focused_index !== undefined && picture_focused_index !== undefined) {
+                this.setState({
+                    picture_name: this.state.albums[album_focused_index].pictures[picture_focused_index].name,
+                    file_id: this.state.albums[album_focused_index].pictures[picture_focused_index].file_id
+                });
+            } else {
+                this.setState({picture_name: "", file_id: ""});
+            }
+        }
+    };
+
+    handleEditAlbum = e => {
+        const {category_id} = this.props;
+        const {album_focused_index, albums, album_name} = this.state;
+        if (album_focused_index !== undefined) {
+            Axios.patch(`${RootUrl}/album`, {
+                category_id,
+                id: albums[album_focused_index]._id,
+                name: album_name,
+            })
+                .then(res => {
+                    // Save albums pictures
+                    let pictures = albums[album_focused_index].pictures
+                    albums[album_focused_index] = res.data.album;
+                    // Set albums pictures again
+                    albums[album_focused_index].pictures = pictures
+
+                    this.setState({albums, isLoading: false});
+                    toast.info("אלבום עודכן בהצלחה!");
+                })
+                .catch(err => {
+                        this.setState({error: err, isLoading: false});
+                        this.handleToggle("editAlbumModal")(e);
+                        toast.error("עדכון אלבום נכשל!");
+                    }
+                );
+        } else {
+            // If we are adding a new album this will be running
+            Axios.post(`${RootUrl}/album`, {
+                name: album_name,
+                category_id
+            })
+                .then(res => {
+                    albums.push(res.data.album);
+
+                    this.setState({albums, isLoading: false});
+                    toast.info("אלבום נוסף בהצלחה!");
+                })
+                .catch(error => {
+                    this.handleToggle("editAlbumModal")(e);
+                    this.setState({error});
+                    toast.error(" הוספת אלבום נכשלה!");
+                    return;
+                });
+        }
+        this.handleToggle("editAlbumModal")(e);
+    };
+
+
+    handleEditPicture = e => {
+        const {album_focused_index, picture_focused_index, albums, picture_name, file} = this.state;
+        if (album_focused_index !== undefined && picture_focused_index !== undefined) {
+            if (file) {
+                //save the file_id of the previous file
+                const old_file_id = albums[album_focused_index].pictures[picture_focused_index].file_id;
+                const data = new FormData();
+                data.append("file", this.state.file);
+                data.append("filename", this.state.file.name);
+                data.append("category", "gallery");
+                Axios.post(`${RootUrl}/file`, data)
+                    .then(res => {
+                        const file_id = res.data.id;
+                        Axios.patch(`${RootUrl}/picture`, {
+                            id: albums[album_focused_index].pictures[picture_focused_index]._id,
+                            name: picture_name,
+                            album_id: albums[album_focused_index]._id,
+                            file_id
+                        })
+                            .then(res => {
+                                albums[album_focused_index].pictures[picture_focused_index] = res.data.picture;
+
+                                this.setState({albums, isLoading: false});
+                                toast.info(",תמונה עודכנה בהצלחה!");
+                                //after success, delete the previous file
+                                Axios.delete(`${RootUrl}/file`, {
+                                    params: {
+                                        'id': old_file_id
+                                    }
+                                })
+                                    .then(res => {
+                                        if (res.status != 200) {
+                                            toast.error("נכשל במחיקת הקובץ הקודם!");
+                                        }
+                                    })
+                            })
+                            .catch(err => {
+                                this.setState({error: err, isLoading: false});
+                                toast.error("עדכון תמונה נכשל!");
+                            });
+                    });
+            } else {
+                const {file_id} = this.state;
+                Axios.patch(`${RootUrl}/picture`, {
+                    id: albums[album_focused_index].pictures[picture_focused_index]._id,
+                    name: picture_name,
+                    album_id: albums[album_focused_index]._id,
+                    file_id
+                })
+                    .then(res => {
+                        albums[album_focused_index].pictures[picture_focused_index] = res.data.picture;
+
+                        this.setState({albums, isLoading: false});
+                        toast.info("תמונה עודכנה בהצלחה!");
+                    })
+                    .catch(err => {
+                        this.setState({error: err, isLoading: false});
+                        toast.error("עדכון תמונה נכשל!");
+                    });
+            }
+        } else {
+            if (!file) {
+                toast.error("קובץ חסר, הוספת תמונה נכשלה!");
+            } else {
+                const data = new FormData();
+                data.append("file", this.state.file);
+                data.append("filename", this.state.file.name);
+                data.append("category", "gallery");
+                Axios.post(`${RootUrl}/file`, data)
+                    .then(res => {
+                        const file_id = res.data.id;
+                        Axios.post(`${RootUrl}/picture`, {
+                            name: picture_name,
+                            album_id: albums[album_focused_index]._id,
+                            file_id
+                        })
+                            .then(res => {
+                                // If this is the first picture in the album it must be locally initialized
+                                if (albums[album_focused_index].pictures === undefined) {
+                                    albums[album_focused_index].pictures = []
+                                }
+                                albums[album_focused_index].pictures.push(res.data.picture);
+
+                                this.setState({albums, isLoading: false});
+                                toast.info("תמונה נוספה בהצלחה!");
+                            })
+                            .catch(err => {
+                                this.setState({error: err, isLoading: false});
+                                toast.error(" הוספת תמונה נכשלה!");
+                            });
+                    })
+                    .catch(error => {
+                        this.setState({error});
+                        toast.error(" הוספת תמונה נכשלה!");
+                    });
+            }
+        }
+        this.handleToggle("editPictureModal")(e);
+    };
+
+    toggleCollapse = collapseID => () =>
+        this.setState(prevState => ({
+            collapseID: prevState.collapseID !== collapseID ? collapseID : ""
+        }));
+
+    deletePicture(picture, set_toast=true) {
+        Axios.delete(`${RootUrl}/picture`, {
+            params: {
+                id: picture._id
+            }
+        })
+            .then(res => {
+                Axios.delete(`${RootUrl}/file`, {
+                    params: {
+                        'id': picture.file_id
+                    }
+                }).then(res => {
+                    if (set_toast){
+                        if (res.status != 200) {
+                            toast.error("נכשל במחיקת הקובץ!");
+                        } else {
+                            toast.info("תמונה נמחקה בהצלחה!");
+                        }
+                    }
+                })
+            })
+            .catch(err => {
+                this.setState({error: err, isLoading: false});
+                if (set_toast) {
+                    toast.error("מחיקת תמונה נכשלה!");
+                }
+            })
+    }
+
+    handleDeleteAlbum = e => {
+        const {album_focused_index, albums} = this.state;
+
+        if (album_focused_index !== undefined) {
+            const id = albums[album_focused_index]._id;
+            Axios.delete(`${RootUrl}/album`, {
+                params: {
+                    id
+                }
+            })
+                .then(res => {
+                    // Delete all albums pictures
+                    const pictures = albums[album_focused_index].pictures
+                    if (pictures) {
+                        for (let i = 0; i < pictures.length; i++) {
+                            this.deletePicture(pictures[i], false)
+                        }
+                    }
+
+                    this.setState({
+                        albums: albums.filter(elem => elem._id !== id),
+                        isLoading: false
+                    })
+                    toast.info("אלבום נמחק בהצלחה!");
+                })
+                .catch(err => {
+                    this.setState({error: err, isLoading: false});
+                    this.handleToggle("deleteModal")(e);
+                    toast.error("מחיקת אלבום נכשלה!");
+                });
+            this.handleToggle("deleteModal")(e);
+        }
+    };
+
+    handleDeletePicture = e => {
+        const {album_focused_index, picture_focused_index, albums} = this.state;
+
+        if (album_focused_index !== undefined && picture_focused_index !== undefined) {
+            const id = albums[album_focused_index].pictures[picture_focused_index]._id;
+
+            this.deletePicture(albums[album_focused_index].pictures[picture_focused_index])
+            albums[album_focused_index].pictures = albums[album_focused_index].pictures.filter(elem => elem._id !== id)
+            this.handleToggle("deletePictureModal")(e);
+            /*
+            Axios.delete(`${RootUrl}/picture`, {
+                params: {
+                    id
+                }
+            })
+                .then(res => {
+                    albums[album_focused_index].pictures = albums[album_focused_index].pictures.filter(elem => elem._id !== id)
+                    this.setState({
+                        albums: albums,
+                        isLoading: false
+                    });
+                    Axios.delete(`${RootUrl}/file`, {
+                        params: {
+                            'id': file_id
+                        }
+                    }).then(res => {
+                        if (res.status != 200) {
+                            toast.error("נכשל במחיקת הקובץ!");
+                        } else {
+                            toast.info("תמונה נמחקה בהצלחה!");
+                        }
+                    })
+                })
+                .catch(err => {
+                    this.setState({error: err, isLoading: false});
+                    toast.error("מחיקת תמונה נכשלה!");
+                }).finally(() => {
+                this.handleToggle("deletePictureModal")(e);
+            })*/
         }
     };
 
@@ -106,10 +373,16 @@ class Admin_Gallery_EditableTable extends Component {
                     <div className="edit-buttons">
                         <MDBIcon
                             className="edit-button"
+                            icon="plus"
+                            size="sm"
+                            onClick={this.handleToggle("editPictureModal", index)}
+                        />
+                        <MDBIcon
+                            className="edit-button"
                             icon="edit"
                             size="sm"
                             style={{marginLeft: "5px"}}
-                            onClick={this.handleToggle("editModal", index)}
+                            onClick={this.handleToggle("editAlbumModal", index)}
                         />
                         <MDBIcon
                             className="remove-button"
@@ -129,93 +402,34 @@ class Admin_Gallery_EditableTable extends Component {
         );
     };
 
-    handleEditAlbum = e => {
-        const {category_id} = this.props;
-        const {focused_index, albums, name, icon} = this.state;
-        if (focused_index !== undefined) {
-            Axios.patch(`${RootUrl}/album`, {
-                category_id,
-                id: albums[focused_index]._id,
-                name,
-                icon,
-            })
-                .then(res => {
-                    albums[focused_index] = res.data.album;
-                    // Initialize album
-                    albums[focused_index].pictures = []
-                    this.setState({albums, isLoading: false});
-                    toast.info("אלבום עודכן בהצלחה!");
-                })
-                .catch(err => {
-                        this.setState({error: err, isLoading: false});
-                        this.handleToggle("editModal")(e);
-                        toast.error("עדכון אלבום נכשל!");
-                    }
-                );
-        } else {
-            const data = new FormData();
-            data.append("name", name);
-
-            Axios.post(`${RootUrl}/album`, {
-                name,
-                icon,
-                category_id
-            })
-                .then(res => {
-                    albums.push(res.data.album);
-
-                    this.setState({albums, isLoading: false});
-                    toast.info("אלבום נוסף בהצלחה!");
-                })
-                .catch(error => {
-                    this.handleToggle("editModal")(e);
-                    this.setState({error});
-                    toast.error(" הוספת אלבום נכשלה!");
-                    return;
-                });
-        }
-        this.handleToggle("editModal")(e);
-    };
-
-    toggleCollapse = collapseID => () =>
-        this.setState(prevState => ({
-            collapseID: prevState.collapseID !== collapseID ? collapseID : ""
-        }));
-
-    handleDeleteAlbum = e => {
-        const {focused_index, albums} = this.state;
-
-        if (focused_index !== undefined) {
-            const id = albums[focused_index]._id;
-            Axios.delete(`${RootUrl}/album`, {
-                params: {
-                    id
-                }
-            })
-                .then(res => {
-                    this.setState({
-                        albums: albums.filter(elem => elem._id !== id),
-                        isLoading: false
-                    })
-                    toast.info("אלבום נמחק בהצלחה!");
-                })
-                .catch(err => {
-                    this.setState({error: err, isLoading: false});
-                    this.handleToggle("deleteModal")(e);
-                    toast.error("מחיקת אלבום נכשלה!");
-                });
-            this.handleToggle("deleteModal")(e);
-        }
-    };
-
     renderPictures = (album_index) => {
         const {albums} = this.state;
-        return albums[album_index].pictures.map(({ file_id }, index) => {
+
+        // If no pictures are defined for the album, return
+        if (albums[album_index].pictures === undefined) {
+            return []
+        }
+        return albums[album_index].pictures.map(({file_id, name}, index) => {
             const href = new URL(`${RootUrl}/file`);
             href.searchParams.append('id', file_id);
             return (
                 <MDBCol md="4">
                     <figure>
+                        <h5 align="center" className="dark-grey-text mb-3"> {name} </h5>
+                        <div className="gallery-edit-buttons">
+                            <MDBIcon
+                                className="edit-button ml-2"
+                                icon="edit"
+                                size="sm"
+                                onClick={this.handleToggle("editPictureModal", album_index, index)}
+                            />
+                            <MDBIcon
+                                className="remove-button  ml-3"
+                                icon="times"
+                                size="sm"
+                                onClick={this.handleToggle("deletePictureModal", album_index, index)}
+                            />
+                        </div>
                         <MDBView hover zoom className="picture-view">
                             <img
                                 src={href}
@@ -223,13 +437,6 @@ class Admin_Gallery_EditableTable extends Component {
                                 alt="Gallery"
                                 className="img-fluid"
                             />
-                            <div className="gallery-edit-buttons">
-                                <MDBIcon
-                                    className="remove-button"
-                                    icon="times"
-                                    onClick={this.handleToggle("deleteModal", album_index, index)}
-                                />
-                            </div>
                         </MDBView>
                     </figure>
                 </MDBCol>
@@ -270,7 +477,7 @@ class Admin_Gallery_EditableTable extends Component {
                     <MDBCol>
                         <div>
                             <MDBBtn size="sm" style={{marginBottom: "15px"}} type="button"
-                                    onClick={this.handleToggle("editModal")}>
+                                    onClick={this.handleToggle("editAlbumModal")}>
                                 <MDBIcon
                                     icon="plus"
                                     size="lg"
@@ -290,10 +497,21 @@ class Admin_Gallery_EditableTable extends Component {
                         </MDBCard>
                     </MDBCol>
                 </MDBRow>
+
+                {this.getMDBModals()}
+
+                <Toaster/>
+            </React.Fragment>
+        );
+    }
+
+    getMDBModals() {
+        return (
+            <React.Fragment>
                 <MDBModal
                     className="form-elegant"
-                    isOpen={this.state.editModal}
-                    toggle={this.handleToggle("editModal")}
+                    isOpen={this.state.editAlbumModal}
+                    toggle={this.handleToggle("editAlbumModal")}
                 >
                     <MDBModalBody className="mx-3">
                         <section className="form-elegant">
@@ -304,7 +522,7 @@ class Admin_Gallery_EditableTable extends Component {
                             </div>
 
                             <MDBInput
-                                name="name"
+                                name="album_name"
                                 onChange={this.handleChange}
                                 label="שם"
                                 group
@@ -312,21 +530,10 @@ class Admin_Gallery_EditableTable extends Component {
                                 validate
                                 error="wrong"
                                 success="right"
-                                value={this.state.name}
-                            />
-                            <MDBInput
-                                name="icon"
-                                onChange={this.handleChange}
-                                label="הזן שם צלמית"
-                                group
-                                type="text"
-                                validate
-                                error="wrong"
-                                success="right"
-                                value={this.state.icon}
+                                value={this.state.album_name}
                             />
                             <div className="mb-3 pr-5 pl-5">
-                                <MDBBtn type="button" onClick={this.handleToggle("editModal")}>
+                                <MDBBtn type="button" onClick={this.handleToggle("editAlbumModal")}>
                                     <MDBIcon icon="times" size="lg"/>
                                 </MDBBtn>
                                 <MDBBtn
@@ -340,6 +547,52 @@ class Admin_Gallery_EditableTable extends Component {
                         </section>
                     </MDBModalBody>
                 </MDBModal>
+
+                <MDBModal
+                    className="form-elegant"
+                    isOpen={this.state.editPictureModal}
+                    toggle={this.handleToggle("editPictureModal")}
+                >
+                    <MDBModalBody className="mx-3">
+                        <section className="form-elegant">
+                            <div className="text-center">
+                                <h1 className="dark-grey-text mb-5">
+                                    <strong>ערוך תמונה</strong>
+                                </h1>
+                            </div>
+
+                            <MDBInput
+                                name="picture_name"
+                                onChange={this.handleChange}
+                                label="שם"
+                                group
+                                type="text"
+                                validate
+                                error="wrong"
+                                success="right"
+                                value={this.state.picture_name}
+                            />
+                            <Dragzone
+                                handleFiles={this.handleFiles}
+                                file={this.state.file}
+                                file_id={this.state.file_id}
+                            />
+                            <div className="mb-3 pr-5 pl-5">
+                                <MDBBtn type="button" onClick={this.handleToggle("editPictureModal")}>
+                                    <MDBIcon icon="times" size="lg"/>
+                                </MDBBtn>
+                                <MDBBtn
+                                    type="button"
+                                    color="green"
+                                    onClick={this.handleEditPicture}
+                                >
+                                    <MDBIcon icon="save" size="lg"/>
+                                </MDBBtn>
+                            </div>
+                        </section>
+                    </MDBModalBody>
+                </MDBModal>
+
                 <MDBModal
                     className="form-elegant "
                     isOpen={this.state.deleteModal}
@@ -361,10 +614,30 @@ class Admin_Gallery_EditableTable extends Component {
                         </MDBBtn>
                     </MDBModalFooter>
                 </MDBModal>
-                <Toaster/>
-            </React.Fragment>
-        );
 
+                <MDBModal
+                    className="form-elegant "
+                    isOpen={this.state.deletePictureModal}
+                    toggle={this.handleToggle("deletePictureModal")}
+                >
+                    <MDBModalBody style={{textAlign: "center"}}>
+                        <h4>
+                            האם אתה בטוח שאתה רוצה למחוק את התמונה? <br/>
+                            <strong style={{fontWeight: "900"}}>
+                                אין דרך לשחזר פעולה זאת!
+                            </strong>
+                        </h4>
+                        <br/>
+                    </MDBModalBody>
+                    <MDBModalFooter>
+                        <MDBBtn onClick={this.handleToggle("deletePictureModal")}>ביטול</MDBBtn>
+                        <MDBBtn color="red" onClick={this.handleDeletePicture}>
+                            מחיקה
+                        </MDBBtn>
+                    </MDBModalFooter>
+                </MDBModal>
+            </React.Fragment>
+        )
     }
 };
 export default Admin_Gallery_EditableTable;
