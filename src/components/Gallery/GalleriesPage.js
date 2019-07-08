@@ -3,7 +3,7 @@ import {MDBRow, MDBCol, MDBView, MDBMask, MDBCard, MDBNav, MDBTabContent} from "
 import { Link } from "react-router-dom";
 import "../../assets/Lightbox.css";
 import HeaderImage from "../HeaderImage";
-import {GalleryRef, RootUrl} from "../constants"
+import {GalleryRef, RootUrl, GalleryBackground} from "../constants"
 import NavComponent from "../NavComponent";
 import Axios from "axios";
 
@@ -50,7 +50,6 @@ class Albums extends Component {
 
 const AlbumBlocks = ({ albums }) => {
   const album_list = albums.map(({ _id, name }, index) => {
-      //<img className="card-img-top" src={"image"} alt="Card image cap" />
     return (
       <MDBCol className="col-3 products-col">
         <Link to={`/gallery/${_id}`}>
@@ -62,7 +61,7 @@ const AlbumBlocks = ({ albums }) => {
                   <p className="white-text">Zoom effect</p>
                 </MDBMask>
               </MDBView>
-
+                <img className="card-img-top" src={require('../../assets/gallery_background.jpg')} alt="Card image cap" />
               <a>
                 <div class="mask rgba-white-slight waves-effect waves-light" />
               </a>
@@ -94,158 +93,6 @@ class GalleriesPage extends Component {
     this.state = {
       photoIndex: 0,
       isOpen: false,
-      categories: [
-        {
-          _id: "1",
-          name: "בטיחות",
-          albums: [
-            {
-              _id: "1",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "2",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "3",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "4",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            }
-          ]
-        },
-        {
-          _id: "2",
-          name: "דת",
-          albums: [
-            {
-              _id: "1",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "2",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "3",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "4",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            }
-          ]
-        },
-        {
-          _id: "3",
-          name: 'ת"ש',
-          albums: [
-            {
-              _id: "1",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "2",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "3",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "4",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            }
-          ]
-        },
-        {
-          _id: "4",
-          name: "שלישות",
-          albums: [
-            {
-              _id: "1",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "2",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "3",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "4",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            }
-          ]
-        },
-        {
-          _id: "5",
-          name: "בטחון מידע",
-          albums: [
-            {
-              _id: "1",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "2",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "3",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            },
-            {
-              _id: "4",
-              name: 'בה"ד 15 פורים 2019',
-              image:
-                "https://mdbootstrap.com/img/Mockups/Lightbox/Original/img%20(70).jpg"
-            }
-          ]
-        }
-      ]
     };
   }
 

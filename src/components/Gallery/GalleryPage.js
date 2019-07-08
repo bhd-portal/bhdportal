@@ -5,32 +5,7 @@ import "../../assets/Lightbox.css";
 import Gallery from "./Gallery";
 import HeaderImage from "../HeaderImage";
 import Axios from "axios";
-import {RootUrl} from "../constants";
-
-class Gallery2 extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            albums: []
-        };
-    }
-
-    componentDidMount() {
-        Axios.get(`${RootUrl}/album`, {
-            params: {category_id: this.props.category_id}
-        }).then(response => {
-            this.setState({albums: response.data.albums});
-        });
-    }
-
-    render() {
-        return (
-            <Gallery
-                documents={this.state.documents}
-            />
-        );
-    }
-}
+import {RootUrl, GalleryBackground} from "../constants";
 
 class GalleryPage extends Component {
     constructor(props) {
@@ -64,9 +39,10 @@ class GalleryPage extends Component {
 
     render() {
         const {name, pictures} = this.state;
-        //<HeaderImage imageLink={headerImage}/>
+
         return (
             <React.Fragment>
+                <HeaderImage imageLink={require('../../assets/gallery_background.jpg')}/>
                 <h1 className="h1-title mb-4 text-center">{name}</h1>
                 <MDBContainer
                     fluid
