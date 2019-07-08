@@ -1,12 +1,79 @@
 import React, { Component } from "react";
-import { MDBRow, MDBCol, MDBView, MDBMask, MDBCard } from "mdbreact";
+import {MDBRow, MDBCol, MDBView, MDBMask, MDBCard, MDBNav, MDBTabContent} from "mdbreact";
 import { Link } from "react-router-dom";
-import "../assets/Lightbox.css";
-import HeaderImage from "./HeaderImage";
-import NavComponent from "./NavComponent";
+import "../../assets/Lightbox.css";
+import HeaderImage from "../HeaderImage";
+import {GalleryRef, RootUrl} from "../constants"
+import NavComponent from "../NavComponent";
+import Axios from "axios";
 
-const Albums = ({ albums }) => {
-  const album_list = albums.map(({ _id, name, image }, index) => {
+class Albums extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            albums: []
+        };
+    }
+
+    getAlbumsPictures = (albums) => {
+        let new_albums = albums;
+        for (let i = 0; i < new_albums.length; i++) {
+            Axios.get(`${RootUrl}/picture`, {
+                params: {
+                    'album_id': new_albums[i]._id
+                }
+            }).then(res => {
+                new_albums[i].pictures = res.data.pictures
+            }).catch(err => {
+                this.setState({error: err});
+            });
+        }
+        this.setState({albums: new_albums});
+    };
+
+    componentDidMount() {
+        Axios.get(`${RootUrl}/album`, {
+            params: { category_id: this.props.category_id }
+        }).then(response => {
+            this.getAlbumsPictures(response.data.albums)
+        });
+    }
+
+    render() {
+        return this.state.albums.map(({name, pictures}) => {
+            return (
+                <React.Fragment>
+                    <div class="classic-tabs mb-2">
+                        <MDBNav classicTabs color="cyan">
+                            {name}
+                        </MDBNav>
+                        <MDBTabContent className="card" activeItem={this.state.activeTab}>
+                            <Pictures
+                                pictures={pictures}
+                            />
+                        </MDBTabContent>
+                    </div>
+                </React.Fragment>
+
+            );
+
+        })
+
+    }
+
+}
+
+const Pictures = ({ pictures }) => {
+    if (pictures === undefined){
+        return (
+            <MDBCard style={{ padding: "20px" }}>
+                <MDBRow center className="products-row">
+                    {}
+                </MDBRow>
+            </MDBCard>
+        )
+    }
+  const album_list = pictures.map(({ _id, name }, index) => {
     return (
       <MDBCol className="col-3 products-col">
         <Link to={`/gallery/${_id}`}>
@@ -14,7 +81,7 @@ const Albums = ({ albums }) => {
           <div class="card card-cascade mb-4 ">
             <div class="view view-cascade overlay mb-3">
               <MDBView hover zoom>
-                <img class="card-img-top" src={image} alt="Card image cap" />
+                <img class="card-img-top" src={"image"} alt="Card image cap" />
                 <MDBMask className="flex-center">
                   <p className="white-text">Zoom effect</p>
                 </MDBMask>
@@ -218,12 +285,10 @@ class GalleriesPage extends Component {
           title="גלריית התמונות"
         />
         <NavComponent
-          page_id="5ca4bd85d4ff14140cc2c92f"
-          categories={this.state.categories}
-          shouldGetCategoriesFromProps={true}
+          page_ref={GalleryRef}
           // render works with _id as a parameter,
             // so we need to the function to get the albums from this `_id` in categories
-          render={_id => <Albums albums={this._get_albums(_id)} />}
+          render={category_id => <Albums category_id={category_id} />}
         />
       </React.Fragment>
     );
