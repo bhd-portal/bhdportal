@@ -33,47 +33,24 @@ class Albums extends Component {
 
     componentDidMount() {
         Axios.get(`${RootUrl}/album`, {
-            params: { category_id: this.props.category_id }
+            params: {category_id: this.props.category_id}
         }).then(response => {
             this.getAlbumsPictures(response.data.albums)
         });
     }
 
     render() {
-        return this.state.albums.map(({name, pictures}) => {
-            return (
-                <React.Fragment>
-                    <div class="classic-tabs mb-2">
-                        <MDBNav classicTabs color="cyan">
-                            {name}
-                        </MDBNav>
-                        <MDBTabContent className="card" activeItem={this.state.activeTab}>
-                            <Pictures
-                                pictures={pictures}
-                            />
-                        </MDBTabContent>
-                    </div>
-                </React.Fragment>
-
-            );
-
-        })
-
-    }
-
+        return (
+            <AlbumBlocks
+                albums={this.state.albums}
+            />
+        )
+    };
 }
 
-const Pictures = ({ pictures }) => {
-    if (pictures === undefined){
-        return (
-            <MDBCard style={{ padding: "20px" }}>
-                <MDBRow center className="products-row">
-                    {}
-                </MDBRow>
-            </MDBCard>
-        )
-    }
-  const album_list = pictures.map(({ _id, name }, index) => {
+const AlbumBlocks = ({ albums }) => {
+  const album_list = albums.map(({ _id, name }, index) => {
+      //<img className="card-img-top" src={"image"} alt="Card image cap" />
     return (
       <MDBCol className="col-3 products-col">
         <Link to={`/gallery/${_id}`}>
@@ -81,7 +58,6 @@ const Pictures = ({ pictures }) => {
           <div class="card card-cascade mb-4 ">
             <div class="view view-cascade overlay mb-3">
               <MDBView hover zoom>
-                <img class="card-img-top" src={"image"} alt="Card image cap" />
                 <MDBMask className="flex-center">
                   <p className="white-text">Zoom effect</p>
                 </MDBMask>
@@ -281,7 +257,7 @@ class GalleriesPage extends Component {
     return (
       <React.Fragment>
         <HeaderImage
-          imageLink="https://mdbootstrap.com/img/Photos/Slides/img%20(135).jpg"
+          imageLink={require('../../assets/gallery_background.jpg')}
           title="גלריית התמונות"
         />
         <NavComponent
@@ -293,14 +269,6 @@ class GalleriesPage extends Component {
       </React.Fragment>
     );
   }
-
-   _get_albums(_id) {
-      for(var index in this.state.categories) {
-          if(this.state.categories[index]._id === _id) {
-              return this.state.categories[index].albums
-          }
-      }
-    }
 
 }
 export default GalleriesPage;
