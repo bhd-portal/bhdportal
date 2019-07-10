@@ -8,6 +8,7 @@ import {
   MDBIcon
 } from "mdbreact";
 import Axios from "axios";
+import { RootUrl } from "./constants";
 
 class SubNavComponent extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class SubNavComponent extends Component {
   getSubCategories = () => {
     const { category_id } = this.props;
 
-    Axios.get(`http://localhost:5003/api/subcategory`, {
+    Axios.get(`${RootUrl}/subcategory`, {
       params: { category_id }
     })
       .then(response => {

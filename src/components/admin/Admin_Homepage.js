@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import "./Admin_Homepage.css";
 import Axios from "axios";
 import Toaster from "../Toaster";
+import {RootUrl} from "../constants";
 
 class Admin_Gallery extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class Admin_Gallery extends Component {
   }
 
   getIdeals = () => {
-    Axios.get(`http://localhost:5003/api/ideals`)
+    Axios.get(`${RootUrl}/ideals`)
       .then(response => {
         this.setState({ ideals: response.data});
       })
@@ -57,7 +58,7 @@ class Admin_Gallery extends Component {
   };
 
   updateIdeal(ideal, text) {
-    Axios.post(`http://localhost:5003/api/ideals/` + ideal._id, {text})
+    Axios.post(`${RootUrl}/ideals/` + ideal._id, {text})
       .then(response => {
         // this.setState({ ideals: response.data});
         toast.info("ערך עודכן בהצלחה!");
@@ -70,7 +71,7 @@ class Admin_Gallery extends Component {
   }
 
   getUpdates = () => {
-    Axios.get(`http://localhost:5003/api/news`)
+    Axios.get(`${RootUrl}/news`)
       .then(response => {
         this.setState({ updates: response.data, isLoading: false });
       })
@@ -108,7 +109,7 @@ class Admin_Gallery extends Component {
   handleDelete = e => {
     const { focused_index } = this.state;
     const update_id = this.state.updates[focused_index]._id;
-    Axios.delete(`http://localhost:5003/api/news/${update_id}`)
+    Axios.delete(`${RootUrl}/news/${update_id}`)
       .then(response => {
         this.setState({
           updates: this.state.updates.filter(elem => elem._id !== update_id)
@@ -126,7 +127,7 @@ class Admin_Gallery extends Component {
     if (focused_index != undefined) {
       const update_id = this.state.updates[focused_index]._id;
       Axios.post(
-        `http://localhost:5003/api/news/${update_id}`,
+        `${RootUrl}/news/${update_id}`,
         this.state.editValues
       )
         .then(response => {
@@ -140,7 +141,7 @@ class Admin_Gallery extends Component {
         });
     } else {
       console.log(this.state.editValues);
-      Axios.post(`http://localhost:5003/api/news`, this.state.editValues)
+      Axios.post(`${RootUrl}/news`, this.state.editValues)
         .then(response => {
           const updates = this.state.updates;
           updates.push(response.data);

@@ -42,7 +42,7 @@ class GalleryPage extends Component {
 
         return (
             <React.Fragment>
-                <HeaderImage imageLink={require('../../assets/gallery_background.jpg')}/>
+                <HeaderImage imageLink={require('../../rassets/gallery_background.jpg')}/>
                 <h1 className="h1-title mb-4 text-center">{name}</h1>
                 <MDBContainer
                     fluid
