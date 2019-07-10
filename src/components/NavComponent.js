@@ -16,10 +16,17 @@ class NavComponent extends Component {
     this.state = {
       activeTab: "1",
       categories: [],
-      isLoading: true
+      isLoading: true,
+        shouldGetCategoriesFromProps: props.shouldGetCategoriesFromProps
     };
 
-    this.getCategories();
+    if(this.state.shouldGetCategoriesFromProps) {
+        this.state.categories = props.categories;
+        this.state.isLoading = false;
+    } else {
+        this.getCategories();
+    }
+
   }
 
   toggleTab = activeTab => e => this.setState({ activeTab });

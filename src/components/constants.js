@@ -5,5 +5,6 @@ module.exports = {
   GalleryRef: "Gallery",
   BranchRef: "Branch",
   ProductRef: "Product",
+  GalleryBackground: '../../assets/gallery_background.jpg',
   RootUrl: "http://localhost:5003/api"
 };

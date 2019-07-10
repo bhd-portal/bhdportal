@@ -45,7 +45,8 @@ class EditableNav extends Component {
         this.setState({ categories: res.data.categories, isLoading: false })
       )
       .catch(err => {
-        this.setState({ error: err, isLoading: false });
+        console.log(err)
+        // this.setState({ error: err, isLoading: false });
       });
   };
 
@@ -179,6 +180,7 @@ class EditableNav extends Component {
     });
     const nav_contents = categories.map(({ _id }, index) => (
       <MDBTabPane tabId={`${parseInt(index) + 1}`} role="tabpanel">
+        {console.log("Rendering! id=" + _id)}
         {" "}
         {render(_id)}
       </MDBTabPane>

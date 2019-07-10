@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import EditableNav from "./EditableNav";
-import Editable_Gallery from "./Editable_Gallery";
+import Admin_Gallery_EditableTable from "./Admin_Gallery_EditableTable";
+import {GalleryRef} from "../constants";
 
 class Admin_Gallery extends Component {
   constructor(props) {
@@ -169,10 +170,10 @@ class Admin_Gallery extends Component {
       <React.Fragment>
         <h1 className="h1-title mb-4 text-center">ניהול גלריית התמונות</h1>
         <EditableNav
-          categories={this.state.categories}
-          render={(parent_index, item) => (
-            <Editable_Gallery category_index={parent_index} {...item} />
-          )}
+            page_ref={GalleryRef}
+            render={category_id => (
+                <Admin_Gallery_EditableTable category_id={category_id} />
+            )}
         />
       </React.Fragment>
     );
