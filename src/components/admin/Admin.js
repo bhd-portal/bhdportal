@@ -10,6 +10,7 @@ import Admin_Branches from "./Admin_Branches";
 import Admin_Mador from "./Admin_Mador_EditableTable";
 import Admin_Homepage from "./Admin_Homepage";
 import Admin_Products from "./Admin_Products";
+import Admin_CommanderWords from "./Admin_CommanderWords";
 import AdminSideNavBar from "./AdminSideNavBar";
 
 class Admin extends Component {
@@ -31,6 +32,7 @@ class Admin extends Component {
             <Route exact path="/admin/gallery" component={Admin_Gallery} />
             <Route exact path="/admin/branches" component={Admin_Branches} />
             <Route exact path="/admin/branches/:id" component={Admin_Mador} />
+            <Route exact path="/admin/commander-words" component={Admin_CommanderWords} />
             <Route exact path="/admin/advanced" component={Admin_Advanced} />
             <Route
               path="/admin*"

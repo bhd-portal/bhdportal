@@ -10,8 +10,10 @@ const pathToTab = {
   ab_guidance: 3,
   documents: 4,
   gallery: 5,
-  brancges: 6,
-  advanced: 7
+  branches: 6,
+  powerpoint: 7,
+  'commander-words': 8,
+  advanced: 9
 };
 
 class AdminSideNavBar extends Component {
@@ -123,7 +125,7 @@ class AdminSideNavBar extends Component {
         <Link to="/admin/powerpoint">
           <MDBTooltip placement="left" tooltipContent="מצגות">
             <MDBBtn
-              className={className(6)}
+              className={className(7)}
               onClick={() => this.setState({ activeTab: 7 })}
               onMouseEnter={this.onHover}
               onMouseLeave={this.onMouseLeave}
@@ -135,11 +137,26 @@ class AdminSideNavBar extends Component {
             </MDBBtn>
           </MDBTooltip>
         </Link>
+        <Link to="/admin/commander-words">
+          <MDBTooltip placement="left" tooltipContent="דבר המפקד">
+            <MDBBtn
+              className={className(8)}
+              onClick={() => this.setState({ activeTab: 8 })}
+              onMouseEnter={this.onHover}
+              onMouseLeave={this.onMouseLeave}
+              floating
+              color="blue"
+            >
+              {" "}
+              <MDBIcon icon="flag" size="md" />
+            </MDBBtn>
+          </MDBTooltip>
+        </Link>
         <Link to="/admin/advanced">
           <MDBTooltip placement="left" tooltipContent="מתקדם">
             <MDBBtn
-              className={className(7)}
-              onClick={() => this.setState({ activeTab: 8 })}
+              className={className(9)}
+              onClick={() => this.setState({ activeTab: 9 })}
               onMouseEnter={this.onHover}
               onMouseLeave={this.onMouseLeave}
               floating
