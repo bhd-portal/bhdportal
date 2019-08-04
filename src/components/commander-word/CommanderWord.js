@@ -1,34 +1,41 @@
+import React, { useMemo } from 'react';
+import css from './CommanderWord.module.scss';
+import looking from "../../images/commander-words/looking.png";
+import running from "../../images/commander-words/running.png";
+import spaceship from "../../images/commander-words/spaceship.png";
+import { CommanderWordsImages } from "../constants";
 
-import React from 'react';
-import "./CommanderWord.css";
-import spaceship from '../../images/commander-words/spaceship.png';
-import looking from '../../images/commander-words/looking.png';
-import running from '../../images/commander-words/running.png';
+const commanderWordsToImages = {
+  looking,
+  running,
+  spaceship
+};
 
-const isReverse = title => title === 'ייעוד המערך' ? '-reverse' : '';
+const CommanderWords = ({ title, content }) => {
 
-const getImage = title => {
-    switch(title) {
-        case 'חזון המערך':
-            return {src: looking, decription: 'looking'};
-        case 'ייעוד המערך':
-            return {src: running, decription: 'running'};
-        case 'דבר המפקד':
-            return {src: spaceship, decription: 'spaceship'};
-        default:
-            return '';
-    }
-}
+  const isReverse = useMemo(() => title === 'ייעוד המערך' ? '-reverse' : '', [title]);
 
-const CommanderWords = props => {
-    return (
-        <div className={`commander-word-container${isReverse(props.title)}`}>
-            <div className="words-wrapper">
-                <div className="title">{props.title}</div>
-                <div className="content"><pre>{props.content}</pre></div>
+  const imageProps = useMemo(() => {
+
+    return Object.assign({},
+      CommanderWordsImages[title],
+      {
+        src: commanderWordsToImages[CommanderWordsImages[title].src]
+      });
+  }, [title]);
+
+  return (
+        <div className={css[`commander-word-container${isReverse}`]}>
+            <div className={css['words-wrapper']}>
+                <div className={css['title']}>{title}</div>
+                <div className={css['content']}>
+                  <pre>{content}</pre>
+                </div>
             </div>
-            <div className="image-wrapper">
-                <img src={getImage(props.title).src} className={`image ${getImage(props.title).decription}`} />
+            <div className={css['image-wrapper']}>
+                <img src={imageProps.src}
+                     alt={imageProps.description}
+                     className={`${css['image']} ${css[imageProps.description]}`} />
             </div>
         </div>
     );

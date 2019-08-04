@@ -3,14 +3,17 @@
     display: flex;
     flex-direction: column;
     align-content: flex-end;
-    direction: rtl;
     text-align: right;
-    padding: 15px;
+    padding: 45px 75px 0 170px;
+}
+
+.commander-word-container:nth-of-type(1) .words-wrapper{
+    padding: 110px;
 }
 
 .title {
     font-family: sans-serif;
-    font-size: 26px;
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -20,7 +23,10 @@
 
 pre {
     font-family: sans-serif;
-    font-size: 12px;
+    font-size: 18px;
+    width: auto;
+    direction: ltr;
+    max-width: 600px;
 }
 
 .commander-word-container {
@@ -33,19 +39,20 @@ pre {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: -380px;
+    & .image {
+        margin-right: 35px;
+    }
 }
 
 .image {
-    /* height: 400px; */
-    width: 400px;
+    width: 500px;
 }
 
 .spaceship {
     position: relative;
-    /* width: 600px; */
-    top: 121px;
+    top: 11px;
     z-index: -1;
-    left: -61px;
 }
 
 .looking {

@@ -75,7 +75,6 @@ class HomePage extends Component {
     getCommanderWords = () => {
         Axios.get(`${RootUrl}/commanderwords`)
             .then(res => {
-                console.log(res.data);
                 this.setState({ words: res.data, isLoading: false });
             })
             .catch(({ error }) => {
@@ -171,11 +170,7 @@ class HomePage extends Component {
                     <UpdateBox updates={updates} />
                 </MDBRow>
                 <div className="commander-words">
-                    {words.map(word => {
-                        return <CommanderWord title={word.title}
-                            content={word.content}
-                        />
-                    })}
+                    {words.map(word => <CommanderWord {...word} />)}
                 </div>
             </React.Fragment>
         );
