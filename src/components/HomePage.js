@@ -23,7 +23,7 @@ import "../assets/Lightbox.css";
 import BranchList from "./BranchList";
 import CommanderWord from './commander-word/CommanderWord';
 import Axios from "axios";
-import { RootUrl } from "./constants";
+import { RootUrl, CommanderWordsImages } from "./constants";
 
 class HomePage extends Component {
     constructor(props) {
@@ -75,7 +75,11 @@ class HomePage extends Component {
     getCommanderWords = () => {
         Axios.get(`${RootUrl}/commanderwords`)
             .then(res => {
-                this.setState({ words: res.data, isLoading: false });
+                let sortedData = [];
+                res.data.forEach((item) => {
+                    sortedData[CommanderWordsImages[item.title].index] = item
+                });
+                this.setState({ words: sortedData, isLoading: false });
             })
             .catch(({ error }) => {
                 this.setState({ error, isLoading: false });

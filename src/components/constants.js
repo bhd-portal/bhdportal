@@ -11,13 +11,16 @@ module.exports = {
   // This data should be retrieved from the backend.
   CommanderWordsImages: {
     'חזון המערך': {
+      index: 0,
       src: 'looking',
       description: 'looking'
     },
     'ייעוד המערך': {
+      index: 1,
       src: 'running',
       description: 'running'},
     'דבר המפקד': {
+      index: 2,
       src: 'spaceship',
       description: 'spaceship'
     }
