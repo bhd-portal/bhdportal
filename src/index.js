@@ -7,7 +7,8 @@ import "./index.css";
 import Portal from "./Portal";
 
 import registerServiceWorker from "./registerServiceWorker";
+import AuthProvider from "./components/AuthProvider";
 
-ReactDOM.render(<Portal />, document.getElementById("root"));
+ReactDOM.render(<AuthProvider><Portal /></AuthProvider>, document.getElementById("root"));
 
 registerServiceWorker();
