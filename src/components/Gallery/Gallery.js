@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { MDBRow, MDBCol, MDBView } from "mdbreact";
 import Lightbox from "react-image-lightbox";
 import {RootUrl} from "../constants";
+import css from './Gallery.module.scss';
 
 class Gallery extends Component {
   constructor(props) {
@@ -29,20 +30,18 @@ class Gallery extends Component {
       photoIndex++;
       const privateKey = photoIndex;
       return (
-        <MDBCol md="4" key={photoIndex}>
+        <MDBCol md="2" key={photoIndex}>
           <figure>
-            <MDBView hover zoom>
-              <h4 class="dark-grey-text mb-3"> {name} </h4>
-              <img
-                src={href}
-                style={{ cursor: "default" }}
-                alt="Gallery"
-                className="img-fluid"
-                onClick={() =>
-                  this.setState({ photoIndex: privateKey, isOpen: true })
-                }
-              />
-            </MDBView>
+            <div className="card card-cascade mb-3 ">
+              <div className="view view-cascade overlay mb-3">
+                <MDBView hover zoom>
+                  <h4 className="dark-grey-text mb-3"> {name} </h4>
+                  <div className={css["image-background"]}
+                       onClick={() => this.setState({ photoIndex: privateKey, isOpen: true })}
+                       style={{background: `url('${href}') no-repeat center center`, backgroundSize: 'contain'}} />
+                </MDBView>
+              </div>
+            </div>
           </figure>
         </MDBCol>
       );

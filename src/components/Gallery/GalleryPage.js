@@ -5,7 +5,7 @@ import "../../assets/Lightbox.css";
 import Gallery from "./Gallery";
 import HeaderImage from "../HeaderImage";
 import Axios from "axios";
-import {RootUrl, GalleryBackground} from "../constants";
+import {RootUrl} from "../constants";
 
 class GalleryPage extends Component {
     constructor(props) {
@@ -47,8 +47,7 @@ class GalleryPage extends Component {
                 <MDBContainer
                     fluid
                     className="text-center"
-                    style={{alignItems: "center"}}
-                >
+                    style={{alignItems: "center"}}>
                     <MDBCard className="text-center" style={{padding: "0 20px"}}>
                         <Gallery pictures={pictures}/>
                     </MDBCard>

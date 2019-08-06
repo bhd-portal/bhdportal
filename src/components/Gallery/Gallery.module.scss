@@ -1,0 +1,12 @@
+.image-background {
+   cursor: pointer;
+   height: 200px;
+}
+
+figure {
+  width: 100%;
+}
+
+.image-background::after {
+  content: ' ';
+}

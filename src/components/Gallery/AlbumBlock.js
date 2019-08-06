@@ -24,7 +24,7 @@ const AlbumBlock = ({ name, _id }) => {
     <MDBCol className="col-3 products-col">
       <Link to={`/gallery/${_id}`}>
         {" "}
-        <div className="card card-cascade mb-4 ">
+        <div className="card card-cascade mb-3 ">
           <div className="view view-cascade overlay mb-3">
             <MDBView hover zoom>
               <MDBMask className="flex-center">
