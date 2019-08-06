@@ -16,11 +16,16 @@ class Gallery extends Component {
     window.scrollTo(0, 0);
   }
 
+  getImageUrl = (imageFileId) => {
+    const href = new URL(`${RootUrl}/file`);
+    href.searchParams.append('id', imageFileId);
+    return href
+  }
+
   renderImages = pictures => {
     let photoIndex = -1;
     return pictures.map(({file_id, name}) => {
-      const href = new URL(`${RootUrl}/file`);
-      href.searchParams.append('id', file_id);
+      const href = this.getImageUrl(file_id);
       photoIndex++;
       const privateKey = photoIndex;
       return (
@@ -59,7 +64,7 @@ class Gallery extends Component {
         </div>
         {isOpen && (
           <Lightbox
-            mainSrc={pictures[photoIndex]}
+            mainSrc={this.getImageUrl(pictures[photoIndex].file_id)}
             nextSrc={pictures[(photoIndex + 1) % pictures.length]}
             prevSrc={pictures[(photoIndex + pictures.length - 1) % pictures.length]}
             imageTitle={photoIndex + 1 + "/" + pictures.length}
