@@ -12,6 +12,7 @@ import Toaster from "../Toaster";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import { RootUrl } from "../constants";
+import Dragzone from "./Dragzone";
 
 class Admin_Prod_EditableTable extends Component {
   constructor(props) {
@@ -20,10 +21,10 @@ class Admin_Prod_EditableTable extends Component {
       deleteModal: false,
       editModal: false,
       focused_index: undefined,
-      imageURL: "",
       title: "",
       content: "",
       link: "",
+      avatar_file_id: "",
       isLoading: true,
       error: undefined,
       products: []
@@ -36,8 +37,9 @@ class Admin_Prod_EditableTable extends Component {
     Axios.get(`${RootUrl}/product`, {
       params: { subcategory_id: this.props.subcategory_id }
     })
-      .then(res =>
-        this.setState({ products: res.data.products, isLoading: false })
+      .then(res =>{
+        this.setState({ products: res.data.products, isLoading: false });
+      }
       )
       .catch(({ error }) => {
         this.setState({ error, isLoading: false });
@@ -45,25 +47,40 @@ class Admin_Prod_EditableTable extends Component {
   };
 
   handleToggle = (modal, focused_index = undefined) => e => {
-    this.setState({ [modal]: !this.state[modal], focused_index });
+    this.setState({ [modal]: !this.state[modal], focused_index, file: undefined });
     if (modal === "editModal") {
       if (focused_index !== undefined) {
         this.setState(this.state.products[focused_index]);
       } else {
-        this.setState({ imageURL: "", title: "", content: "", link: "" });
+        this.setState({ imageURL: "", title: "", content: "", link: "", avatar_file_id: "" });
       }
     }
+  };
+
+  handleFiles = files => {
+    this.setState({ 
+      file: files[0],
+     });
   };
 
   handleDelete = e => {
     const { focused_index, products } = this.state;
     const id = this.state.products[focused_index]._id;
+    const avatar_file_id = this.state.products[focused_index].avatar_file_id;
+    
     Axios.delete(`${RootUrl}/product`, {
       params: {
         id
       }
     })
       .then(res => {
+        //TODO: consider moving this to the backend
+        Axios.delete(`${RootUrl}/file`, {
+          params: {
+            id: avatar_file_id
+          }
+        });
+
         this.setState({
           products: products.filter(elem => elem._id !== id),
           isLoading: false
@@ -75,57 +92,6 @@ class Admin_Prod_EditableTable extends Component {
         toast.error("מחיקת תוצר נכשלה!");
       });
     this.handleToggle("deleteModal")(e);
-  };
-
-  handleEdit = e => {
-    const { subcategory_id } = this.props;
-    const {
-      focused_index,
-      products,
-      imageURL,
-      title,
-      content,
-      link
-    } = this.state;
-    if (focused_index !== undefined) {
-      Axios.patch(`${RootUrl}/product`, {
-        subcategory_id,
-        id: products[focused_index]._id,
-        imageURL,
-        title,
-        content,
-        link
-      })
-        .then(res => {
-          products[focused_index] = res.data.product;
-
-          this.setState({ products, isLoading: false });
-          toast.info("תוצר עודכן בהצלחה!");
-        })
-        .catch(err => {
-          this.setState({ error: err, isLoading: false });
-          toast.error("עדכון תוצר נכשל!");
-        });
-    } else {
-      Axios.post(`${RootUrl}/product`, {
-        subcategory_id,
-        imageURL,
-        title,
-        content,
-        link
-      })
-        .then(res => {
-          products.push(res.data.product);
-
-          this.setState({ products, isLoading: false });
-          toast.info("תוצר נוסף בהצלחה!");
-        })
-        .catch(err => {
-          this.setState({ error: err, isLoading: false });
-          toast.error(" הוספת תוצר נכשלה!");
-        });
-    }
-    this.handleToggle("editModal")(e);
   };
 
   handleCheckbox = index => e => {
@@ -152,6 +118,82 @@ class Admin_Prod_EditableTable extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
+
+  postFile = async () => {
+    const data = new FormData();
+    data.append("file", this.state.file);
+    data.append("filename", this.state.file.name);
+    data.append("category", "product_avatar");
+    return (await Axios.post(`${RootUrl}/file`, data)).data.id
+  };
+
+  patchProductInFocus = async () => {
+    const {subcategory_id} = this.props;
+    let { focused_index, products, title, content, link, file, avatar_file_id } = this.state;
+
+    try {
+      if (file) {
+        // New file uploaded, replace older one. Not using patch directly as we're logically creating a new file.
+        const old_file_id = avatar_file_id;
+        avatar_file_id = await this.postFile();
+        Axios.delete(`${RootUrl}/file`, {
+          params: {
+            id: old_file_id
+          }
+        });
+
+      }
+      const res = await Axios.patch(`${RootUrl}/product`, {
+        subcategory_id,
+        id: products[focused_index]._id,
+        avatar_file_id,
+        title,
+        content,
+        link
+      });
+
+      products[focused_index] = res.data.product;
+      this.setState({ products, isLoading: false });
+      toast.info("תוצר עודכן בהצלחה!");
+    } catch (err) {
+      this.setState({ error: err, isLoading: false });
+      toast.error("עדכון תוצר נכשל!");
+    }
+  }
+
+  postProduct = async () => {
+    const {subcategory_id} = this.props;
+    let { products, title, content, link } = this.state;
+
+    let avatar_file_id = await this.postFile();
+
+    try {
+      const res = await Axios.post(`${RootUrl}/product`, {
+        subcategory_id,
+        avatar_file_id,
+        title,
+        content,
+        link
+      });
+
+      products.push(res.data.product);
+      this.setState({ products, isLoading: false });
+      toast.info("תוצר נוסף בהצלחה!");
+    } catch (err) {
+      this.setState({ error: err, isLoading: false });
+      toast.error(" הוספת תוצר נכשלה!");
+    }
+  }
+
+  handleEdit = e => {
+    if (this.state.focused_index !== undefined) {
+      this.patchProductInFocus()
+        .then(() => this.handleToggle("editModal")(e));
+    } else {
+      this.postProduct()
+        .then(() => this.handleToggle("editModal")(e));
+    }
+};
 
   render() {
     const products = this.state.products.map(({ title, checked }, index) => {
@@ -262,17 +304,6 @@ class Admin_Prod_EditableTable extends Component {
               </div>
 
               <MDBInput
-                name="imageURL"
-                onChange={this.handleChange}
-                label="כתובת תמונה"
-                group
-                type="text"
-                validate
-                error="wrong"
-                success="right"
-                value={this.state.imageURL}
-              />
-              <MDBInput
                 name="title"
                 onChange={this.handleChange}
                 label="שם"
@@ -306,11 +337,19 @@ class Admin_Prod_EditableTable extends Component {
                 success="right"
                 value={this.state.content}
               />
+              <label style={{fontSize: '0.8rem', fontWeight: '300', color: '#757575'}} htmlFor="dragzone">
+                צרף תמונה
+              </label>
+              <Dragzone
+                handleFiles={this.handleFiles}
+                file={this.state.file}
+                id="dragzone"
+              />
               <div className="mb-3 pr-5 pl-5">
                 <MDBBtn type="button" onClick={this.handleToggle("editModal")}>
                   <MDBIcon icon="times" size="lg" />
                 </MDBBtn>
-                <MDBBtn type="button" color="green" onClick={this.handleEdit}>
+                <MDBBtn type="button" color="green" onClick={this.handleEdit.bind(this)}>
                   <MDBIcon icon="save" size="lg" />
                 </MDBBtn>
               </div>
