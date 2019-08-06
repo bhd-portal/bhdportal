@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-
+import withPrivateRoute from "./components/withPrivateRoute"
 import HomePage from "./components/HomePage";
 import BranchesPage from "./components/BranchesPage";
 import ABGuidancePage from "./components/ab_guidance/ABGuidancePage";
@@ -18,19 +18,19 @@ class Routes extends React.Component {
     return (
       <Switch>
         {/* 1st Level Paths */}
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/ab_guidance" component={ABGuidancePage} />
-        <Route exact path="/documents" component={DocumentsPage} />
-        <Route exact path="/powerpoint" component={PowerpointPage} />
-        <Route exact path="/gallery" component={GalleriesPage} />
-        <Route exact path="/gallery/:id" component={GalleryPage} />
-        <Route exact path="/products" component={ProductsPage} />
+        <Route exact path="/" component={withPrivateRoute(HomePage)} />
+        <Route exact path="/ab_guidance" component={withPrivateRoute(ABGuidancePage)} />
+        <Route exact path="/documents" component={withPrivateRoute(DocumentsPage)} />
+        <Route exact path="/powerpoint" component={withPrivateRoute(PowerpointPage)} />
+        <Route exact path="/gallery" component={withPrivateRoute(GalleriesPage)} />
+        <Route exact path="/gallery/:id" component={withPrivateRoute(GalleryPage)} />
+        <Route exact path="/products" component={withPrivateRoute(ProductsPage)} />
         {/* <Route exact path="/templates" component={TemplatesPage} />
         <Route exact path="/branch" component={BranchExamplePage} /> */}
-        <Route path="/admin" component={Admin} />
+        <Route path="/admin" component={withPrivateRoute(Admin)} />
 
         {/*Branches Pages Paths */}
-        <Route exact path="/branches/:id" component={BranchesPage} />
+        <Route exact path="/branches/:id" component={withPrivateRoute(BranchesPage)} />
         {/* Create a path for each branch page */}
         {/* Have here a component that passes props with the keyword: emek
       to a new component that would be generic for all the branches 
